@@ -1,4 +1,4 @@
-package com.example.solicitacao.domain;
+package com.fiapgrupo27.solicitacao.domain;
 
 import jakarta.persistence.*;
 
@@ -25,7 +25,7 @@ public class SolicitacaoArquivo {
     @Column(name = "status", length = 50, nullable = false)
     private String status;
 
-    @Column(name = "data_inclusao_registro", nullable = false)
+    @Column(name = "data_inclusao", nullable = false)
     private LocalDateTime dataInclusao;
 
     // Construtor padrão

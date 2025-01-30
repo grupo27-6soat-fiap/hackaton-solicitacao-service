@@ -1,4 +1,4 @@
-package com.example.solicitacao.domain;
+package com.fiapgrupo27.solicitacao.domain;
 
 public interface SolicitacaoArquivoRepository {
     SolicitacaoArquivo salvar(SolicitacaoArquivo solicitacaoArquivo);

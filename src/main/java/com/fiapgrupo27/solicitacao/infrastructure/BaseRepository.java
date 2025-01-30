@@ -1,4 +1,4 @@
-package com.example.solicitacao.infrastructure;
+package com.fiapgrupo27.solicitacao.infrastructure;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 

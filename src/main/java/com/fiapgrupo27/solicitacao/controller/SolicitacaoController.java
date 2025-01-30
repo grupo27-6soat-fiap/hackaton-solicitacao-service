@@ -1,6 +1,9 @@
-package com.example.solicitacao.controller;
+package com.fiapgrupo27.solicitacao.controller;
 
-import com.example.solicitacao.service.SolicitacaoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiapgrupo27.solicitacao.domain.Solicitante;
+import com.fiapgrupo27.solicitacao.service.SolicitacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +18,27 @@ import java.util.List;
 public class SolicitacaoController {
 
     private final SolicitacaoService solicitacaoService;
+    private final ObjectMapper objectMapper; // Para converter JSON (String) para um objeto Java
+
 
     @Autowired
-    public SolicitacaoController(SolicitacaoService solicitacaoService) {
+    public SolicitacaoController(SolicitacaoService solicitacaoService, ObjectMapper objectMapper) {
         this.solicitacaoService = solicitacaoService;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping
-    public String criarSolicitacao(@RequestParam("arquivos") List<MultipartFile> arquivos) {
-        return solicitacaoService.criarSolicitacaoComArquivos(arquivos);
+    public String criarSolicitacao(@RequestParam("arquivos") List<MultipartFile> arquivos,
+                                   @RequestParam("solicitante") String solicitante) {
+        // Converte a String JSON para um objeto Solicitante
+        Solicitante solicitanteMapper = null;
+        try {
+            solicitanteMapper = objectMapper.readValue(solicitante, Solicitante.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return solicitacaoService.criarSolicitacaoComArquivos(arquivos, solicitanteMapper);
     }
 
     @PutMapping("/{idSolicitacao}/arquivos/{idArquivo}/status")

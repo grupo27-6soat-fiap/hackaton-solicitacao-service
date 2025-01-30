@@ -1,4 +1,4 @@
-package com.example.solicitacao.service;
+package com.fiapgrupo27.solicitacao.service;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.example.solicitacao.domain;
+package com.fiapgrupo27.solicitacao.domain;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.GeneratedValue;

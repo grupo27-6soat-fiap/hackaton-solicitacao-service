@@ -1,7 +1,6 @@
-package com.example.solicitacao.infrastructure;
+package com.fiapgrupo27.solicitacao.infrastructure;
 
-import com.example.solicitacao.domain.SolicitacaoArquivoRepositoryCustom;
-import com.example.solicitacao.repository.SolicitacaoArquivoRepository;
+import com.fiapgrupo27.solicitacao.domain.SolicitacaoArquivoRepositoryCustom;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

@@ -1,10 +1,13 @@
-package com.example.solicitacao.service;
+package com.fiapgrupo27.solicitacao.service;
 
-import com.example.solicitacao.domain.Solicitacao;
-import com.example.solicitacao.domain.SolicitacaoArquivo;
-import com.example.solicitacao.domain.SolicitacaoArquivoRepositoryCustom;
-import com.example.solicitacao.repository.SolicitacaoArquivoRepository;
-import com.example.solicitacao.repository.SolicitacaoRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiapgrupo27.solicitacao.domain.Solicitacao;
+import com.fiapgrupo27.solicitacao.domain.SolicitacaoArquivo;
+import com.fiapgrupo27.solicitacao.domain.SolicitacaoArquivoRepositoryCustom;
+import com.fiapgrupo27.solicitacao.domain.Solicitante;
+import com.fiapgrupo27.solicitacao.repository.SolicitacaoArquivoRepository;
+import com.fiapgrupo27.solicitacao.repository.SolicitacaoRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,8 @@ public class SolicitacaoService {
     private final SolicitacaoArquivoRepository arquivoRepository;
     private final RabbitTemplate rabbitTemplate;
     private final SolicitacaoArquivoRepositoryCustom arquivoRepositoryCustom;
+    private final ObjectMapper objectMapper = new ObjectMapper(); // Jackson para converter objetos em JSON
+
 
     @Autowired
     public SolicitacaoService(SolicitacaoRepository solicitacaoRepository,
@@ -37,29 +42,30 @@ public class SolicitacaoService {
         this.arquivoRepositoryCustom = arquivoRepositoryCustom;
     }
 
-    public String criarSolicitacaoComArquivos(List<MultipartFile> arquivos) {
+    public String criarSolicitacaoComArquivos(List<MultipartFile> arquivos, Solicitante solicitante) {
         if (arquivos == null || arquivos.isEmpty()) {
             throw new IllegalArgumentException("Nenhum arquivo enviado.");
         }
 
         // Criar a solicitação
-        Solicitacao solicitacao = new Solicitacao(null, 1, "PENDENTE", LocalDateTime.now());
+        Solicitacao solicitacao = new Solicitacao(null, solicitante.getIdSolicitante(), "PENDENTE", LocalDateTime.now());
         Solicitacao solicitacaoSalva = solicitacaoRepository.save(solicitacao);
 
 
         for (MultipartFile arquivo : arquivos) {
-            SolicitacaoArquivo solicitacaoArquivo = new SolicitacaoArquivo(Math.toIntExact(solicitacaoSalva.getId()), 1, arquivo.getOriginalFilename(), "PENDENTE", LocalDateTime.now());
+            SolicitacaoArquivo solicitacaoArquivo = new SolicitacaoArquivo(Math.toIntExact(solicitacaoSalva.getId()), solicitante.getIdSolicitante(), arquivo.getOriginalFilename(), "PENDENTE", LocalDateTime.now());
             SolicitacaoArquivo arquivoSalvo = arquivoRepository.save(solicitacaoArquivo);
             //Envia o Arquivo para a Fila
             byte[] arquivoBytes = null;
             try {
                 arquivoBytes = arquivo.getBytes();
+                String solicitanteJson = objectMapper.writeValueAsString(solicitante);
+                rabbitTemplate.convertAndSend("video-processing-queue", criarMensagemMQ(arquivoSalvo, arquivoBytes, solicitanteJson));
+                System.out.println("Arquivo enviado para a fila: " + arquivo.getOriginalFilename());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-            rabbitTemplate.convertAndSend("video-processing-queue", criarMensagemMQ(arquivoSalvo, arquivoBytes));
-            System.out.println("Arquivo enviado para a fila: " + arquivo.getOriginalFilename());
 
         }
 
@@ -67,12 +73,13 @@ public class SolicitacaoService {
         return "Solicitação criada com sucesso: ID " + solicitacaoSalva.getId();
     }
 
-    private Map<String, Object> criarMensagemMQ(SolicitacaoArquivo arquivo, byte[] arquivoBytes) {
+    private Map<String, Object> criarMensagemMQ(SolicitacaoArquivo arquivo, byte[] arquivoBytes, String solicitante) {
         Map<String, Object> mensagem = new HashMap<>();
         mensagem.put("idSolicitacao", arquivo.getIdSolicitacao());
         mensagem.put("nomeArquivo", arquivo.getNomeArquivo());
         mensagem.put("idArquivo", arquivo.getIdArquivo());
         mensagem.put("conteudoArquivo", arquivoBytes);
+        mensagem.put("solicitante", solicitante);
 
         return mensagem;
     }
