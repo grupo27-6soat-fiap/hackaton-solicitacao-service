@@ -3,6 +3,7 @@ package com.fiapgrupo27.solicitacao.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiapgrupo27.solicitacao.domain.Solicitante;
+import com.fiapgrupo27.solicitacao.dto.SolicitacaoDTO;
 import com.fiapgrupo27.solicitacao.service.SolicitacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,5 +54,10 @@ public class SolicitacaoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao atualizar o status: " + e.getMessage());
         }
+    }
+
+    @GetMapping
+    public List<SolicitacaoDTO> obterSolicitacoes(@RequestParam(required = false) Integer idCliente) {
+        return solicitacaoService.obterSolicitacoes(idCliente);
     }
 }

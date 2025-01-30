@@ -1,8 +1,16 @@
 package com.fiapgrupo27.solicitacao.infrastructure;
 
 import com.fiapgrupo27.solicitacao.domain.SolicitacaoArquivoRepositoryCustom;
+import com.fiapgrupo27.solicitacao.dto.SolicitacaoArquivoDTO;
+import com.fiapgrupo27.solicitacao.dto.SolicitacaoDTO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class SolicitacaoArquivoRepositoryImpl extends BaseRepository implements SolicitacaoArquivoRepositoryCustom {
@@ -17,4 +25,43 @@ public class SolicitacaoArquivoRepositoryImpl extends BaseRepository implements 
         return jdbcTemplate.update(sql, status, idArquivo, idSolicitacao);
 
     }
-}
+
+    @Override
+    public List<SolicitacaoDTO> obterSolicitacoes(Integer idCliente) {
+        String sql = "SELECT " +
+                "s.id, s.id_cliente, s.status, s.data_inclusao, " +
+                "sa.id_arquivo, sa.nome_arquivo, sa.status AS status_arquivo, sa.data_inclusao AS data_arquivo " +
+                "FROM solicitacao s " +
+                "LEFT JOIN solicitacao_arquivo sa ON s.id = sa.id_solicitacao " +
+                (idCliente != null ? "WHERE s.id_cliente = ?" : ""); // Aplica filtro opcionalmente
+
+        Map<Long, SolicitacaoDTO> solicitacaoMap = new HashMap<>();
+
+        jdbcTemplate.query(sql,
+                idCliente != null ? new Object[]{idCliente} : new Object[]{},
+                (rs) -> {
+                    Long idSolicitacao = rs.getLong("id");
+                    int idCli = rs.getInt("id_cliente");
+                    String status = rs.getString("status");
+                    LocalDateTime dataInclusao = rs.getTimestamp("data_inclusao").toLocalDateTime();
+
+                    Long idArquivo = rs.getLong("id_arquivo");
+                    String nomeArquivo = rs.getString("nome_arquivo");
+                    String statusArquivo = rs.getString("status_arquivo");
+                    LocalDateTime dataArquivo = rs.getTimestamp("data_arquivo") != null
+                            ? rs.getTimestamp("data_arquivo").toLocalDateTime()
+                            : null;
+
+                    // Obtém ou cria a solicitação no mapa
+                    SolicitacaoDTO solicitacaoDTO = solicitacaoMap.computeIfAbsent(idSolicitacao, id ->
+                            new SolicitacaoDTO(id, idCli, status, dataInclusao, new ArrayList<>()));
+
+                    // Se houver um arquivo associado, adiciona à lista
+                    if (idArquivo != null && idArquivo > 0) {
+                        solicitacaoDTO.getArquivos().add(new SolicitacaoArquivoDTO(idArquivo, nomeArquivo, statusArquivo, dataArquivo));
+                    }
+                });
+
+        return new ArrayList<>(solicitacaoMap.values());
+}}
+

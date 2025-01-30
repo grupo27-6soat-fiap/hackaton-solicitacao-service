@@ -6,6 +6,7 @@ import com.fiapgrupo27.solicitacao.domain.Solicitacao;
 import com.fiapgrupo27.solicitacao.domain.SolicitacaoArquivo;
 import com.fiapgrupo27.solicitacao.domain.SolicitacaoArquivoRepositoryCustom;
 import com.fiapgrupo27.solicitacao.domain.Solicitante;
+import com.fiapgrupo27.solicitacao.dto.SolicitacaoDTO;
 import com.fiapgrupo27.solicitacao.repository.SolicitacaoArquivoRepository;
 import com.fiapgrupo27.solicitacao.repository.SolicitacaoRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -71,6 +72,10 @@ public class SolicitacaoService {
 
 
         return "Solicitação criada com sucesso: ID " + solicitacaoSalva.getId();
+    }
+
+    public List<SolicitacaoDTO> obterSolicitacoes(Integer idCliente) {
+        return arquivoRepositoryCustom.obterSolicitacoes(idCliente);
     }
 
     private Map<String, Object> criarMensagemMQ(SolicitacaoArquivo arquivo, byte[] arquivoBytes, String solicitante) {
