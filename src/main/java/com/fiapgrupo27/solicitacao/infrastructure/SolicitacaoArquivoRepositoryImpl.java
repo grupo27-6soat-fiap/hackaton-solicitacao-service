@@ -27,21 +27,21 @@ public class SolicitacaoArquivoRepositoryImpl extends BaseRepository implements 
     }
 
     @Override
-    public List<SolicitacaoDTO> obterSolicitacoes(Integer idCliente) {
+    public List<SolicitacaoDTO> obterSolicitacoes(Integer idSolicitante) {
         String sql = "SELECT " +
-                "s.id, s.id_cliente, s.status, s.data_inclusao, " +
+                "s.id_solicitacao, s.id_solicitante, s.status, s.data_inclusao, " +
                 "sa.id_arquivo, sa.nome_arquivo, sa.status AS status_arquivo, sa.data_inclusao AS data_arquivo " +
                 "FROM solicitacao s " +
-                "LEFT JOIN solicitacao_arquivo sa ON s.id = sa.id_solicitacao " +
-                (idCliente != null ? "WHERE s.id_cliente = ?" : ""); // Aplica filtro opcionalmente
+                "LEFT JOIN solicitacao_arquivo sa ON s.id_solicitacao = sa.id_solicitacao " +
+                (idSolicitante != null ? "WHERE s.id_solicitante = ?" : ""); // Aplica filtro opcionalmente
 
         Map<Long, SolicitacaoDTO> solicitacaoMap = new HashMap<>();
 
         jdbcTemplate.query(sql,
-                idCliente != null ? new Object[]{idCliente} : new Object[]{},
+                idSolicitante != null ? new Object[]{idSolicitante} : new Object[]{},
                 (rs) -> {
-                    Long idSolicitacao = rs.getLong("id");
-                    int idCli = rs.getInt("id_cliente");
+                    Long idSolicitacao = rs.getLong("id_solicitacao");
+                    int idCli = rs.getInt("id_solicitante");
                     String status = rs.getString("status");
                     LocalDateTime dataInclusao = rs.getTimestamp("data_inclusao").toLocalDateTime();
 

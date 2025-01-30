@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "13668fed-8811-4647-bd86-e6676ff33d60",
+		"name": "Hackaton",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6695097"
+	},
+	"item": [
+		{
+			"name": "processVideoMicroServ",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "arquivos",
+							"type": "file",
+							"src": [
+								"/C:/Users/User/OneDrive/Área de Trabalho/chaves_festaDaVizinhanca.mp4",
+								"/C:/Users/User/OneDrive/Área de Trabalho/chaves_acapulco.mp4"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/solicitacoes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"solicitacoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "obterSolicitacoes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idSolicitacao\": 18,\r\n    \"idArquivo\": 15,\r\n    \"status\": \"CONCLUIDO\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/solicitacoes?idSolicitante=55",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"solicitacoes"
+					],
+					"query": [
+						{
+							"key": "idSolicitante",
+							"value": "55"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

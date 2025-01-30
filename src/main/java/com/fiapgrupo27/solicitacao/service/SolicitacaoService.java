@@ -54,7 +54,7 @@ public class SolicitacaoService {
 
 
         for (MultipartFile arquivo : arquivos) {
-            SolicitacaoArquivo solicitacaoArquivo = new SolicitacaoArquivo(Math.toIntExact(solicitacaoSalva.getId()), solicitante.getIdSolicitante(), arquivo.getOriginalFilename(), "PENDENTE", LocalDateTime.now());
+            SolicitacaoArquivo solicitacaoArquivo = new SolicitacaoArquivo(Math.toIntExact(solicitacaoSalva.getIdSolicitacao()), solicitante.getIdSolicitante(), arquivo.getOriginalFilename(), "PENDENTE", LocalDateTime.now());
             SolicitacaoArquivo arquivoSalvo = arquivoRepository.save(solicitacaoArquivo);
             //Envia o Arquivo para a Fila
             byte[] arquivoBytes = null;
@@ -71,11 +71,11 @@ public class SolicitacaoService {
         }
 
 
-        return "Solicitação criada com sucesso: ID " + solicitacaoSalva.getId();
+        return "Solicitação criada com sucesso: ID " + solicitacaoSalva.getIdSolicitacao();
     }
 
-    public List<SolicitacaoDTO> obterSolicitacoes(Integer idCliente) {
-        return arquivoRepositoryCustom.obterSolicitacoes(idCliente);
+    public List<SolicitacaoDTO> obterSolicitacoes(Integer idSolicitante) {
+        return arquivoRepositoryCustom.obterSolicitacoes(idSolicitante);
     }
 
     private Map<String, Object> criarMensagemMQ(SolicitacaoArquivo arquivo, byte[] arquivoBytes, String solicitante) {

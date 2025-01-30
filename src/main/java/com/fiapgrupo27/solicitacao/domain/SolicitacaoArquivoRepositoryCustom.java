@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SolicitacaoArquivoRepositoryCustom {
     int atualizarStatus(Long idSolicitacao, Long idArquivo, String status);
-    List<SolicitacaoDTO> obterSolicitacoes(@Param("idCliente") Integer idCliente);
+    List<SolicitacaoDTO> obterSolicitacoes(@Param("idSolicitante") Integer idSolicitante);
 
 }

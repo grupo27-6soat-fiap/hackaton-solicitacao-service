@@ -57,7 +57,7 @@ public class SolicitacaoController {
     }
 
     @GetMapping
-    public List<SolicitacaoDTO> obterSolicitacoes(@RequestParam(required = false) Integer idCliente) {
-        return solicitacaoService.obterSolicitacoes(idCliente);
+    public List<SolicitacaoDTO> obterSolicitacoes(@RequestParam(required = false) Integer idSolicitante) {
+        return solicitacaoService.obterSolicitacoes(idSolicitante);
     }
 }

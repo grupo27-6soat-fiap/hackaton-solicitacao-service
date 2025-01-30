@@ -10,14 +10,14 @@ import java.util.List;
 public class Solicitacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private int idCliente;
+    private Long idSolicitacao;
+    private int idSolicitante;
     private String status;
     private LocalDateTime dataInclusao;
 
-    public Solicitacao(Long id, int idCliente, String status, LocalDateTime dataInclusao) {
-        this.id = id;
-        this.idCliente = idCliente;
+    public Solicitacao(Long idSolicitacao, int idSolicitante, String status, LocalDateTime dataInclusao) {
+        this.idSolicitacao = idSolicitacao;
+        this.idSolicitante = idSolicitante;
         this.status = status;
         this.dataInclusao = dataInclusao;
     }
@@ -30,12 +30,12 @@ public class Solicitacao {
         this.status = novoStatus;
     }
 
-    public int getIdCliente() {
-        return idCliente;
+    public int getIdSolicitante() {
+        return idSolicitante;
     }
 
-    public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+    public void setIdSolicitante(int idSolicitante) {
+        this.idSolicitante = idSolicitante;
     }
 
     public String getStatus() {
@@ -54,12 +54,12 @@ public class Solicitacao {
         this.dataInclusao = dataInclusao;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdSolicitacao() {
+        return idSolicitacao;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdSolicitacao(Long id) {
+        this.idSolicitacao = id;
     }
 
 

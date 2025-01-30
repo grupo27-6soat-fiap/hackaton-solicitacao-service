@@ -16,8 +16,8 @@ public class SolicitacaoArquivo {
     @Column(name = "id_solicitacao", nullable = false)
     private Integer idSolicitacao;
 
-    @Column(name = "id_cliente", nullable = false)
-    private Integer idCliente;
+    @Column(name = "id_solicitante", nullable = false)
+    private Integer idSolicitante;
 
     @Column(name = "nome_arquivo", length = 300, nullable = false)
     private String nomeArquivo;
@@ -33,9 +33,9 @@ public class SolicitacaoArquivo {
     }
 
     // Construtor com argumentos
-    public SolicitacaoArquivo(Integer idSolicitacao, Integer idCliente, String nomeArquivo, String status, LocalDateTime dataInclusao) {
+    public SolicitacaoArquivo(Integer idSolicitacao, Integer idSolicitante, String nomeArquivo, String status, LocalDateTime dataInclusao) {
         this.idSolicitacao = idSolicitacao;
-        this.idCliente = idCliente;
+        this.idSolicitante = idSolicitante;
         this.nomeArquivo = nomeArquivo;
         this.status = status;
         this.dataInclusao = dataInclusao;
@@ -54,12 +54,12 @@ public class SolicitacaoArquivo {
         this.idSolicitacao = idSolicitacao;
     }
 
-    public Integer getIdCliente() {
-        return idCliente;
+    public Integer getIdSolicitante() {
+        return idSolicitante;
     }
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
+    public void setIdSolicitante(Integer idSolicitante) {
+        this.idSolicitante = idSolicitante;
     }
 
     public String getNomeArquivo() {
