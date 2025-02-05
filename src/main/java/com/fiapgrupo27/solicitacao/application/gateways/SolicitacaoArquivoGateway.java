@@ -4,5 +4,6 @@ import com.fiapgrupo27.solicitacao.domain.entity.SolicitacaoArquivo;
 
 public interface SolicitacaoArquivoGateway {
     void salvar(SolicitacaoArquivo solicitacaoArquivo);
+    void atualizarStatus(Long idSolicitacao, Long idArquivo, String status);
 
 }

@@ -15,4 +15,13 @@ public class SolicitacaoEntityMapper {
         return new Solicitacao(solicitacaoEntity.getIdSolicitacao(), solicitacaoEntity.getIdSolicitante(), solicitacaoEntity.getStatus(), solicitacaoEntity.getDataInclusao());
     }
 
+    public static Solicitacao toDomain(SolicitacaoEntity entity) {
+        return new Solicitacao(
+                entity.getIdSolicitacao(),
+                entity.getIdSolicitante(),
+                entity.getStatus(),
+                entity.getDataInclusao()
+        );
+    }
+
 }

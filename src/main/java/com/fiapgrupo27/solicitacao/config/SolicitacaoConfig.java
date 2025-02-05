@@ -1,15 +1,20 @@
 package com.fiapgrupo27.solicitacao.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fiapgrupo27.solicitacao.application.gateways.MensagemGateway;
 import com.fiapgrupo27.solicitacao.application.gateways.SolicitacaoArquivoGateway;
 import com.fiapgrupo27.solicitacao.application.gateways.SolicitacaoGateway;
+import com.fiapgrupo27.solicitacao.application.usecases.AtualizarStatusSolicitacaoArquivoInteractor;
 import com.fiapgrupo27.solicitacao.application.usecases.CreateSolicitacaoArquivoInteractor;
 import com.fiapgrupo27.solicitacao.application.usecases.CreateSolicitacaoInteractor;
+import com.fiapgrupo27.solicitacao.application.usecases.ObterSolicitacoesInteractor;
 import com.fiapgrupo27.solicitacao.infrastructure.controllers.SolicitacaoDTOMapper;
 import com.fiapgrupo27.solicitacao.infrastructure.gateways.RabbitMQGateway;
 import com.fiapgrupo27.solicitacao.infrastructure.gateways.SolicitacaoEntityMapper;
 import com.fiapgrupo27.solicitacao.infrastructure.gateways.SolicitacaoRepositoryGateway;
+import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoArquivoRepository;
 import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoRepository;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -37,14 +42,27 @@ public class SolicitacaoConfig {
     ) {
         return new CreateSolicitacaoArquivoInteractor(solicitacaoArquivoGateway, mensagemGateway);
     }
+    @Bean
+    public AtualizarStatusSolicitacaoArquivoInteractor atualizarStatusSolicitacaoArquivoInteractor(
+            SolicitacaoArquivoGateway solicitacaoArquivoGateway
+    ) {
+        return new AtualizarStatusSolicitacaoArquivoInteractor(solicitacaoArquivoGateway);
+    }
+
+    @Bean
+    public ObterSolicitacoesInteractor obterSolicitacoesInteractor(
+            SolicitacaoGateway solicitacaoGateway
+    ) {
+        return new ObterSolicitacoesInteractor(solicitacaoGateway);
+    }
 
     @Bean
     public ObjectMapper objectMapper() {
-        return new ObjectMapper();
+        return new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
     @Bean
-    SolicitacaoGateway solicitacaoGateway(SolicitacaoRepository solicitacaoRepository, SolicitacaoEntityMapper solicitacaoEntityMapper) {
-        return new SolicitacaoRepositoryGateway(solicitacaoRepository, solicitacaoEntityMapper);
+    SolicitacaoGateway solicitacaoGateway(SolicitacaoRepository solicitacaoRepository, SolicitacaoEntityMapper solicitacaoEntityMapper, SolicitacaoArquivoRepository arquivoRepository) {
+        return new SolicitacaoRepositoryGateway(solicitacaoRepository, solicitacaoEntityMapper, arquivoRepository);
     }
     @Bean
     RabbitMQGateway rabbitMQGateway(RabbitTemplate rabbitTemplate) {

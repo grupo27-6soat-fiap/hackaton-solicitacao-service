@@ -26,5 +26,11 @@ public class SolicitacaoArquivoRepositoryGateway implements SolicitacaoArquivoGa
         repository.save(SolicitacaoArquivoEntityMapper.toEntity(solicitacaoArquivo));
     }
 
+    @Override
+    public void atualizarStatus(Long idSolicitacao, Long idArquivo, String status) {
+        repository.atualizarStatus(idSolicitacao, idArquivo, status);
+
+    }
+
 
 }
