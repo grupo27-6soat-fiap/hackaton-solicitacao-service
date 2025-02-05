@@ -1,31 +1,20 @@
-package com.fiapgrupo27.solicitacao.domain;
+package com.fiapgrupo27.solicitacao.domain.entity;
 
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "solicitacao_arquivo")
 public class SolicitacaoArquivo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_arquivo", nullable = false, unique = true)
-    private Integer idArquivo;
+    private Long idArquivo;
 
-    @Column(name = "id_solicitacao", nullable = false)
-    private Integer idSolicitacao;
+    private Long idSolicitacao;
 
-    @Column(name = "id_solicitante", nullable = false)
-    private Integer idSolicitante;
+    private Long idSolicitante;
 
-    @Column(name = "nome_arquivo", length = 300, nullable = false)
     private String nomeArquivo;
 
-    @Column(name = "status", length = 50, nullable = false)
     private String status;
 
-    @Column(name = "data_inclusao", nullable = false)
     private LocalDateTime dataInclusao;
 
     // Construtor padrão
@@ -33,7 +22,7 @@ public class SolicitacaoArquivo {
     }
 
     // Construtor com argumentos
-    public SolicitacaoArquivo(Integer idSolicitacao, Integer idSolicitante, String nomeArquivo, String status, LocalDateTime dataInclusao) {
+    public SolicitacaoArquivo(Long idSolicitacao, Long idSolicitante, String nomeArquivo, String status, LocalDateTime dataInclusao) {
         this.idSolicitacao = idSolicitacao;
         this.idSolicitante = idSolicitante;
         this.nomeArquivo = nomeArquivo;
@@ -42,23 +31,23 @@ public class SolicitacaoArquivo {
     }
 
     // Getters e Setters
-    public Integer getIdArquivo() {
+    public Long getIdArquivo() {
         return idArquivo;
     }
 
-    public Integer getIdSolicitacao() {
+    public Long getIdSolicitacao() {
         return idSolicitacao;
     }
 
-    public void setIdSolicitacao(Integer idSolicitacao) {
+    public void setIdSolicitacao(Long idSolicitacao) {
         this.idSolicitacao = idSolicitacao;
     }
 
-    public Integer getIdSolicitante() {
+    public Long getIdSolicitante() {
         return idSolicitante;
     }
 
-    public void setIdSolicitante(Integer idSolicitante) {
+    public void setIdSolicitante(Long idSolicitante) {
         this.idSolicitante = idSolicitante;
     }
 

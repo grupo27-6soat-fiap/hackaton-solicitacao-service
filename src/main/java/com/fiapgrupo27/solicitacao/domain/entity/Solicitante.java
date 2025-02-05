@@ -1,16 +1,16 @@
-package com.fiapgrupo27.solicitacao.domain;
+package com.fiapgrupo27.solicitacao.domain.entity;
 
 public class Solicitante {
-    private int idSolicitante;
+    private Long idSolicitante;
     private String nomeSolicitante;
     private String email;
 
     // Getters e Setters
-    public int getIdSolicitante() {
+    public Long getIdSolicitante() {
         return idSolicitante;
     }
 
-    public void setIdSolicitante(int idSolicitante) {
+    public void setIdSolicitante(Long idSolicitante) {
         this.idSolicitante = idSolicitante;
     }
 

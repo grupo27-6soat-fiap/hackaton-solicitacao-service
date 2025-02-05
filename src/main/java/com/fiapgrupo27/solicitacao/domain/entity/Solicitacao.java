@@ -1,24 +1,21 @@
-package com.fiapgrupo27.solicitacao.dto;
+package com.fiapgrupo27.solicitacao.domain.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class SolicitacaoDTO {
+public class Solicitacao {
+
     private Long idSolicitacao;
-    private Integer idSolicitante;
+    private Long idSolicitante;
     private String status;
     private LocalDateTime dataInclusao;
-    private List<SolicitacaoArquivoDTO> arquivos;
 
-    public SolicitacaoDTO(Long idSolicitacao, Integer idSolicitante, String status, LocalDateTime dataInclusao, List<SolicitacaoArquivoDTO> arquivos) {
+    public Solicitacao(Long idSolicitacao, Long idSolicitante, String status, LocalDateTime dataInclusao) {
         this.idSolicitacao = idSolicitacao;
         this.idSolicitante = idSolicitante;
         this.status = status;
         this.dataInclusao = dataInclusao;
-        this.arquivos = arquivos;
     }
 
-    // Getters e Setters
     public Long getIdSolicitacao() {
         return idSolicitacao;
     }
@@ -27,11 +24,11 @@ public class SolicitacaoDTO {
         this.idSolicitacao = idSolicitacao;
     }
 
-    public Integer getIdSolicitante() {
+    public Long getIdSolicitante() {
         return idSolicitante;
     }
 
-    public void setIdSolicitante(Integer idSolicitante) {
+    public void setIdSolicitante(Long idSolicitante) {
         this.idSolicitante = idSolicitante;
     }
 
@@ -49,13 +46,5 @@ public class SolicitacaoDTO {
 
     public void setDataInclusao(LocalDateTime dataInclusao) {
         this.dataInclusao = dataInclusao;
-    }
-
-    public List<SolicitacaoArquivoDTO> getArquivos() {
-        return arquivos;
-    }
-
-    public void setArquivos(List<SolicitacaoArquivoDTO> arquivos) {
-        this.arquivos = arquivos;
     }
 }

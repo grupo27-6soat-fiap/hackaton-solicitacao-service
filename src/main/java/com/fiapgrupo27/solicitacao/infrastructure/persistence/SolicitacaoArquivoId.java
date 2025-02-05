@@ -1,48 +1,37 @@
-package com.fiapgrupo27.solicitacao.domain;
+package com.fiapgrupo27.solicitacao.infrastructure.persistence;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-
 @Embeddable
 public class SolicitacaoArquivoId implements Serializable {
+    private Long idSolicitacao;
+    private Long idArquivo;
 
-    private Integer idSolicitacao;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idArquivo;
+    public SolicitacaoArquivoId() {}
 
-    // Construtor padrão
-    public SolicitacaoArquivoId() {
-    }
-
-    // Construtor com argumentos
-    public SolicitacaoArquivoId(Integer idSolicitacao, Integer idArquivo) {
+    public SolicitacaoArquivoId(Long idSolicitacao, Long idArquivo) {
         this.idSolicitacao = idSolicitacao;
         this.idArquivo = idArquivo;
     }
 
-    // Getters e Setters
-    public Integer getIdSolicitacao() {
+    public Long getIdSolicitacao() {
         return idSolicitacao;
     }
 
-    public void setIdSolicitacao(Integer idSolicitacao) {
+    public void setIdSolicitacao(Long idSolicitacao) {
         this.idSolicitacao = idSolicitacao;
     }
 
-    public Integer getIdArquivo() {
+    public Long getIdArquivo() {
         return idArquivo;
     }
 
-    public void setIdArquivo(Integer idArquivo) {
+    public void setIdArquivo(Long idArquivo) {
         this.idArquivo = idArquivo;
     }
 
-    // Métodos equals e hashCode (necessários para chaves compostas)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

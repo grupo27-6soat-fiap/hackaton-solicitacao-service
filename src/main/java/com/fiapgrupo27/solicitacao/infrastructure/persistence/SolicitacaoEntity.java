@@ -1,25 +1,28 @@
-package com.fiapgrupo27.solicitacao.domain;
+package com.fiapgrupo27.solicitacao.infrastructure.persistence;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Entity
 @Table(name = "solicitacao")
-public class Solicitacao {
+public class SolicitacaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSolicitacao;
-    private int idSolicitante;
+    private Long idSolicitante;
     private String status;
     private LocalDateTime dataInclusao;
 
-    public Solicitacao(Long idSolicitacao, int idSolicitante, String status, LocalDateTime dataInclusao) {
+    public SolicitacaoEntity(Long idSolicitacao, Long idSolicitante, String status, LocalDateTime dataInclusao) {
         this.idSolicitacao = idSolicitacao;
         this.idSolicitante = idSolicitante;
         this.status = status;
         this.dataInclusao = dataInclusao;
+    }
+
+    public SolicitacaoEntity() {
+
     }
 
 
@@ -30,11 +33,11 @@ public class Solicitacao {
         this.status = novoStatus;
     }
 
-    public int getIdSolicitante() {
+    public Long getIdSolicitante() {
         return idSolicitante;
     }
 
-    public void setIdSolicitante(int idSolicitante) {
+    public void setIdSolicitante(Long idSolicitante) {
         this.idSolicitante = idSolicitante;
     }
 
@@ -61,6 +64,5 @@ public class Solicitacao {
     public void setIdSolicitacao(Long id) {
         this.idSolicitacao = id;
     }
-
 
 }
