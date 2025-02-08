@@ -22,12 +22,13 @@ public class SolicitacaoArquivo {
     }
 
     // Construtor com argumentos
-    public SolicitacaoArquivo(Long idSolicitacao, Long idSolicitante, String nomeArquivo, String status, LocalDateTime dataInclusao) {
+    public SolicitacaoArquivo(Long idSolicitacao, Long idSolicitante, String nomeArquivo, String status, LocalDateTime dataInclusao, Long idArquivo) {
         this.idSolicitacao = idSolicitacao;
         this.idSolicitante = idSolicitante;
         this.nomeArquivo = nomeArquivo;
         this.status = status;
         this.dataInclusao = dataInclusao;
+        this.idArquivo = idArquivo;
     }
 
     // Getters e Setters

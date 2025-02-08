@@ -12,10 +12,7 @@ import com.fiapgrupo27.solicitacao.application.usecases.CreateSolicitacaoArquivo
 import com.fiapgrupo27.solicitacao.application.usecases.CreateSolicitacaoInteractor;
 import com.fiapgrupo27.solicitacao.application.usecases.ObterSolicitacoesInteractor;
 import com.fiapgrupo27.solicitacao.infrastructure.controllers.SolicitacaoDTOMapper;
-import com.fiapgrupo27.solicitacao.infrastructure.gateways.RabbitMQGateway;
-import com.fiapgrupo27.solicitacao.infrastructure.gateways.SQSGateway;
-import com.fiapgrupo27.solicitacao.infrastructure.gateways.SolicitacaoEntityMapper;
-import com.fiapgrupo27.solicitacao.infrastructure.gateways.SolicitacaoRepositoryGateway;
+import com.fiapgrupo27.solicitacao.infrastructure.gateways.*;
 import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoArquivoRepository;
 import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoRepository;
 import jakarta.annotation.PostConstruct;
@@ -110,14 +107,11 @@ public class SolicitacaoConfig {
                 ))
                 .build();
     }
+    @Bean
+    SolicitacaoArquivoEntityMapper solicitacaoArquivoEntityMapper() {
+        return new SolicitacaoArquivoEntityMapper();
+    }
 
-//    @PostConstruct
-//    public void criarFilaSQS() {
-//        sqsClient.createQueue(CreateQueueRequest.builder()
-//                .queueName("minha-fila")
-//                .build());
-//        System.out.println("Fila 'minha-fila' criada no SQS.");
-//    }
 
 
 

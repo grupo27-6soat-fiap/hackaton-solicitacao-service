@@ -2,7 +2,9 @@ package com.fiapgrupo27.solicitacao.infrastructure.gateways;
 
 import com.fiapgrupo27.solicitacao.application.gateways.SolicitacaoArquivoGateway;
 import com.fiapgrupo27.solicitacao.domain.entity.SolicitacaoArquivo;
+import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoArquivoEntity;
 import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoArquivoRepository;
+import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoEntity;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -14,16 +16,20 @@ public class SolicitacaoArquivoRepositoryGateway implements SolicitacaoArquivoGa
 
     private final SolicitacaoArquivoRepository repository;
     private final RabbitTemplate rabbitTemplate;
+    private final SolicitacaoArquivoEntityMapper entityMapper;
 
 
-    public SolicitacaoArquivoRepositoryGateway(SolicitacaoArquivoRepository repository, RabbitTemplate rabbitTemplate) {
+    public SolicitacaoArquivoRepositoryGateway(SolicitacaoArquivoRepository repository, RabbitTemplate rabbitTemplate, SolicitacaoArquivoEntityMapper entityMapper) {
         this.repository = repository;
         this.rabbitTemplate = rabbitTemplate;
+        this.entityMapper = entityMapper;
     }
 
     @Override
-    public void salvar(SolicitacaoArquivo solicitacaoArquivo) {
-        repository.save(SolicitacaoArquivoEntityMapper.toEntity(solicitacaoArquivo));
+    public SolicitacaoArquivo salvar(SolicitacaoArquivo solicitacaoArquivo) {
+
+        SolicitacaoArquivoEntity savedObj = repository.save(SolicitacaoArquivoEntityMapper.toEntity(solicitacaoArquivo));
+        return entityMapper.toEntity(savedObj);
     }
 
     @Override

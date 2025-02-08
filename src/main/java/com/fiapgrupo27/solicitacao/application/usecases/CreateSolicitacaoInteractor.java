@@ -35,13 +35,13 @@ public class CreateSolicitacaoInteractor {
 
         for (MultipartFile arquivo : arquivos) {
             nomeArquivoAlterado = solicitacaoSalva.getIdSolicitacao() + "/" + arquivo.getOriginalFilename();
-            SolicitacaoArquivo solicitacaoArquivo = new SolicitacaoArquivo(solicitacaoSalva.getIdSolicitacao(), solicitacaoSalva.getIdSolicitante(), nomeArquivoAlterado, "PENDENTE", LocalDateTime.now());
-            solicitacaoArquivoGateway.salvar(solicitacaoArquivo);
+            SolicitacaoArquivo solicitacaoArquivo = new SolicitacaoArquivo(solicitacaoSalva.getIdSolicitacao(), solicitacaoSalva.getIdSolicitante(), nomeArquivoAlterado, "PENDENTE", LocalDateTime.now(), null);
+            SolicitacaoArquivo solicitacaoArquivoSalva = solicitacaoArquivoGateway.salvar(solicitacaoArquivo);
 
             try {
                 String fileUrl = s3Gateway.uploadFile(nomeArquivoAlterado, arquivo.getInputStream(), arquivo.getSize());
 
-                mensagemGateway.enviarMensagem(solicitacaoArquivo, fileUrl, solicitante);
+                mensagemGateway.enviarMensagem(solicitacaoArquivoSalva, fileUrl, solicitante);
 
 //                mensagemGateway.enviarMensagem(solicitacaoArquivo,arquivo.getBytes(),solicitante);
             } catch (IOException e) {
