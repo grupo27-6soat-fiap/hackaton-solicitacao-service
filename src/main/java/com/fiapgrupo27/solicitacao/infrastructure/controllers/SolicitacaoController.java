@@ -51,13 +51,6 @@ public class SolicitacaoController {
         return ResponseEntity.noContent().build();
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<Solicitacao>> obterSolicitacoes(@RequestParam(required = false) Long idSolicitante) {
-//        List<Solicitacao> solicitacoes = obterSolicitacoesInteractor.execute(idSolicitante);
-//
-//        return ResponseEntity.ok(solicitacoes);
-//    }
-
     @GetMapping
     public ResponseEntity<List<SolicitacaoResponseDTO>> obterSolicitacoes(@RequestParam(required = false) Long idSolicitante) {
         List<SolicitacaoResponseDTO> solicitacoes = obterSolicitacoesInteractor.executeFull(idSolicitante);

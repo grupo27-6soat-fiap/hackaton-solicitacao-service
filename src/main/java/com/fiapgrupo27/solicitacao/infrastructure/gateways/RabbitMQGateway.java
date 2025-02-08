@@ -7,6 +7,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class RabbitMQGateway implements MensagemGateway {
     private final RabbitTemplate rabbitTemplate;
 
@@ -15,19 +16,19 @@ public class RabbitMQGateway implements MensagemGateway {
     }
 
     @Override
-    public void enviarMensagem(SolicitacaoArquivo arquivo, byte[] arquivoBytes, String solicitante) {
-        rabbitTemplate.convertAndSend("video-processing-queue", criarMensagemMQ(arquivo, arquivoBytes, solicitante));
+    public void enviarMensagem(SolicitacaoArquivo arquivo, String fileUrl, String solicitante) {
+        rabbitTemplate.convertAndSend("video-processing-queue", criarMensagemMQ(arquivo, fileUrl, solicitante));
         System.out.println("Arquivo enviado para a fila: " + arquivo.getNomeArquivo());
 
 
     }
 
-    private Map<String, Object> criarMensagemMQ(SolicitacaoArquivo arquivo, byte[] arquivoBytes, String solicitante) {
+    private Map<String, Object> criarMensagemMQ(SolicitacaoArquivo arquivo, String fileUrl, String solicitante) {
         Map<String, Object> mensagem = new HashMap<>();
         mensagem.put("idSolicitacao", arquivo.getIdSolicitacao());
         mensagem.put("nomeArquivo", arquivo.getNomeArquivo());
         mensagem.put("idArquivo", arquivo.getIdArquivo());
-        mensagem.put("conteudoArquivo", arquivoBytes);
+        mensagem.put("conteudoArquivo", fileUrl);
         mensagem.put("solicitante", solicitante);
 
         return mensagem;
