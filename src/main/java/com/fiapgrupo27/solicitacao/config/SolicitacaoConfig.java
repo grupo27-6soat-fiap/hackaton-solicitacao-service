@@ -15,13 +15,10 @@ import com.fiapgrupo27.solicitacao.infrastructure.controllers.SolicitacaoDTOMapp
 import com.fiapgrupo27.solicitacao.infrastructure.gateways.*;
 import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoArquivoRepository;
 import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.multipart.MultipartFile;
+
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -71,10 +68,6 @@ public class SolicitacaoConfig {
     SolicitacaoGateway solicitacaoGateway(SolicitacaoRepository solicitacaoRepository, SolicitacaoEntityMapper solicitacaoEntityMapper, SolicitacaoArquivoRepository arquivoRepository) {
         return new SolicitacaoRepositoryGateway(solicitacaoRepository, solicitacaoEntityMapper, arquivoRepository);
     }
-//    @Bean
-//    RabbitMQGateway rabbitMQGateway(RabbitTemplate rabbitTemplate) {
-//        return new RabbitMQGateway(rabbitTemplate);
-//    }
 
     @Bean
     SolicitacaoEntityMapper solicitacaoEntityMapper() {
@@ -91,11 +84,6 @@ public class SolicitacaoConfig {
         return new Queue("video-processing-queue", true);
     }
 
-    @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        return rabbitTemplate;
-    }
 
     @Bean
     public SqsClient sqsClient() {
