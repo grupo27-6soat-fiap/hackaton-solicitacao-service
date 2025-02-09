@@ -30,7 +30,7 @@ public class SQSGateway implements MensagemGateway {
             String mensagemJson = objectMapper.writeValueAsString(mensagem);
 
             SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
-                    .queueUrl(queueUrl)
+                    .queueUrl(System.getenv().getOrDefault("AWS_SQS_QUEUE_URL", queueUrl))
                     .messageBody(mensagemJson)
                     .build();
 

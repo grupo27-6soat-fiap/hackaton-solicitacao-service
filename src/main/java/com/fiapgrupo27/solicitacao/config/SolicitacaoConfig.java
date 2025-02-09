@@ -15,7 +15,7 @@ import com.fiapgrupo27.solicitacao.infrastructure.controllers.SolicitacaoDTOMapp
 import com.fiapgrupo27.solicitacao.infrastructure.gateways.*;
 import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoArquivoRepository;
 import com.fiapgrupo27.solicitacao.infrastructure.persistence.SolicitacaoRepository;
-import org.springframework.amqp.core.Queue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,13 +23,27 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
-import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
+
 
 import java.net.URI;
-import java.util.List;
+
 
 @Configuration
 public class SolicitacaoConfig {
+    private final String aws_region;
+    private final String aws_accesskey;
+    private final String aws_keyid;
+    private final String aws_endpoint;
+
+
+    public SolicitacaoConfig(@Value("${cloud.aws.region}")String aws_region, @Value("${cloud.aws.accesskey}")String aws_accesskey, @Value("${cloud.aws.keyid}")String aws_keyid, @Value("${cloud.aws.endpoint}")String aws_endpoint) {
+
+        this.aws_region = aws_region;
+        this.aws_accesskey = aws_accesskey;
+        this.aws_keyid = aws_keyid;
+        this.aws_endpoint = aws_endpoint;
+    }
+
     @Bean
     public CreateSolicitacaoInteractor createSolicitacaoInteractor(SolicitacaoGateway solicitacaoGateway,
                                                                    SolicitacaoArquivoGateway solicitacaoArquivoGateway,
@@ -79,19 +93,19 @@ public class SolicitacaoConfig {
         return new SolicitacaoDTOMapper(objectMapper);
     }
 
-    @Bean
-    public Queue videoProcessingQueue() {
-        return new Queue("video-processing-queue", true);
-    }
+
 
 
     @Bean
     public SqsClient sqsClient() {
         return SqsClient.builder()
-                .endpointOverride(URI.create("http://localhost:4566")) // LocalStack
-                .region(Region.US_EAST_1)
+                .endpointOverride(URI.create(System.getenv().getOrDefault("AWS_ENDPOINT_URL", aws_endpoint)))
+                .region(Region.of(System.getenv().getOrDefault("AWS_REGION", aws_region)))
                 .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create("test", "test")
+                        AwsBasicCredentials.create(
+                                System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", aws_keyid),
+                                System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", aws_accesskey)
+                        )
                 ))
                 .build();
     }

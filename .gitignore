@@ -36,3 +36,20 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+# Arquivos do Gradle
+.gradle/
+buildOutputCleanup.lock
+executionHistory.bin
+executionHistory.lock
+file-system.probe
+fileHashes.bin
+fileHashes.lock
+resourceHashesCache.bin
+
+# Diretório de build do Gradle (caso não queira versionar artefatos gerados)
+build/
+
+# Arquivos temporários do sistema
+*.lock
