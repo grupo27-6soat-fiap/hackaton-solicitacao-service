@@ -14,12 +14,12 @@ public class ObterSolicitacoesInteractor {
         this.solicitacaoGateway = solicitacaoGateway;
     }
 
-    public List<Solicitacao> execute(Long idSolicitante) {
-        return solicitacaoGateway.obterSolicitacoes(idSolicitante);
+    public List<Solicitacao> execute(String email) {
+        return solicitacaoGateway.obterSolicitacoes(email);
     }
 
-    public List<SolicitacaoResponseDTO> executeFull(Long idSolicitante) {
-        return solicitacaoGateway.obterSolicitacoesComArquivos(idSolicitante);
+    public List<SolicitacaoResponseDTO> executeFull(String email) {
+        return solicitacaoGateway.obterSolicitacoesComArquivos(email);
     }
 
 }

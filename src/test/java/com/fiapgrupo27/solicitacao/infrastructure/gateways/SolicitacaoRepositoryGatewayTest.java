@@ -44,10 +44,10 @@ class SolicitacaoRepositoryGatewayTest {
 
     @Test
     void createSolicitacao_Success() {
-        Solicitacao inputSolicitacao = new Solicitacao(null, null, null, null); // Assuming constructor and setters required
+        Solicitacao inputSolicitacao = new Solicitacao(null, null, null); // Assuming constructor and setters required
         SolicitacaoEntity mappedEntity = new SolicitacaoEntity();
         SolicitacaoEntity savedEntity = new SolicitacaoEntity();
-        Solicitacao expectedDomain = new Solicitacao(null, null, null, null);
+        Solicitacao expectedDomain = new Solicitacao(null, null, null);
 
         when(solicitacaoEntityMapper.toSolicitacaoEntity(inputSolicitacao)).thenReturn(mappedEntity);
         when(solicitacaoRepository.save(mappedEntity)).thenReturn(savedEntity);
@@ -60,20 +60,19 @@ class SolicitacaoRepositoryGatewayTest {
 
     @Test
     public void testObterSolicitacoes() {
-        SolicitacaoEntity entity = new SolicitacaoEntity(1L, 1L, "PENDENTE", null);
+        SolicitacaoEntity entity = new SolicitacaoEntity(1L, null, "email");
 
-        when(solicitacaoRepository.findByIdSolicitante(1L))
+        when(solicitacaoRepository.findByEmail("email"))
                 .thenReturn(List.of(entity));  // Retorna a lista de entidades
 
         // Criando a instância da classe Solicitacao diretamente
-        Solicitacao solicitacao = new Solicitacao(1L, 1L, "PENDENTE", null);
+        Solicitacao solicitacao = new Solicitacao(1L, null, "email");
         
-        List<Solicitacao> result = gateway.obterSolicitacoes(1L);
+        List<Solicitacao> result = gateway.obterSolicitacoes("email");
 
         // Verificando se o resultado contém a solicitação esperada
         assertEquals(1, result.size());
-        assertEquals("PENDENTE", result.get(0).getStatus());
-    
+
     }
 
 }

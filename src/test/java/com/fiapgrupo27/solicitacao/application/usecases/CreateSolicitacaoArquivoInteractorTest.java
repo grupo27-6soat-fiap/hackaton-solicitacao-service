@@ -21,7 +21,6 @@ public class CreateSolicitacaoArquivoInteractorTest {
         // Dados para o teste
         SolicitacaoArquivo solicitacaoArquivo = new SolicitacaoArquivo(
                 1L,  // idSolicitacao
-                100L,  // idSolicitante
                 "arquivo.txt",  // nomeArquivo
                 "PENDENTE",  // status
                 LocalDateTime.now(),  // dataInclusao

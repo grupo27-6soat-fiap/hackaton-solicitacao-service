@@ -14,27 +14,24 @@ class SolicitacaoTest {
     @BeforeEach
     void setUp() {
         // Criação de um objeto Solicitacao antes de cada teste
-        solicitacao = new Solicitacao(1L, 2L, "PENDENTE", LocalDateTime.now());
+        solicitacao = new Solicitacao(1L, LocalDateTime.now(), "email" );
     }
 
     @Test
     void testGettersAndSetters() {
         // Teste dos getters e setters
         assertEquals(1L, solicitacao.getIdSolicitacao());
-        assertEquals(2L, solicitacao.getIdSolicitante());
-        assertEquals("PENDENTE", solicitacao.getStatus());
         assertNotNull(solicitacao.getDataInclusao());
+        assertNotNull(solicitacao.getEmail());
 
         // Alterando valores
         solicitacao.setIdSolicitacao(3L);
-        solicitacao.setIdSolicitante(4L);
-        solicitacao.setStatus("CONCLUIDO");
         solicitacao.setDataInclusao(LocalDateTime.of(2025, 2, 9, 12, 0, 0, 0));
+        solicitacao.setEmail("email1");
 
         // Verificando se as alterações funcionaram
         assertEquals(3L, solicitacao.getIdSolicitacao());
-        assertEquals(4L, solicitacao.getIdSolicitante());
-        assertEquals("CONCLUIDO", solicitacao.getStatus());
+        assertEquals("email1", solicitacao.getEmail());
         assertEquals(LocalDateTime.of(2025, 2, 9, 12, 0, 0, 0), solicitacao.getDataInclusao());
     }
 
@@ -42,25 +39,14 @@ class SolicitacaoTest {
     void testConstructor() {
         // Testando o construtor
         LocalDateTime dataInclusao = LocalDateTime.now();
-        Solicitacao solicitacao = new Solicitacao(1L, 2L, "PENDENTE", dataInclusao);
+        Solicitacao solicitacao = new Solicitacao(1L, dataInclusao, "email" );
 
         assertEquals(1L, solicitacao.getIdSolicitacao());
-        assertEquals(2L, solicitacao.getIdSolicitante());
-        assertEquals("PENDENTE", solicitacao.getStatus());
         assertEquals(dataInclusao, solicitacao.getDataInclusao());
+        assertEquals("email", solicitacao.getEmail());
     }
 
-    @Test
-    void testValidStatus() {
-        // Testando status válido
-        Solicitacao solicitacao = new Solicitacao(1L, 2L, "PENDENTE", LocalDateTime.now());
-        assertEquals("PENDENTE", solicitacao.getStatus());
-    }
 
-    @Test
-    void testInvalidStatus() {
-        // Testando status inválido
-        Solicitacao solicitacao = new Solicitacao(1L, 2L, "INVALIDO", LocalDateTime.now());
-        assertNotEquals("PENDENTE", solicitacao.getStatus());
-    }
+
+
 }

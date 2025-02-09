@@ -23,7 +23,6 @@ class SolicitacaoArquivoEntityMapperTest {
         // Arrange
         SolicitacaoArquivo solicitacaoArquivo = new SolicitacaoArquivo(
                 1L,
-                123L,
                 "arquivo.mp4",
                 "PENDING",
                 LocalDateTime.now(),
@@ -36,7 +35,6 @@ class SolicitacaoArquivoEntityMapperTest {
         // Assert
         assertNotNull(entity);
         assertEquals(solicitacaoArquivo.getIdSolicitacao(), entity.getIdSolicitacao());
-        assertEquals(solicitacaoArquivo.getIdSolicitante(), entity.getIdSolicitante());
         assertEquals(solicitacaoArquivo.getNomeArquivo(), entity.getNomeArquivo());
         assertEquals(solicitacaoArquivo.getStatus(), entity.getStatus());
         assertEquals(solicitacaoArquivo.getDataInclusao(), entity.getDataInclusao());

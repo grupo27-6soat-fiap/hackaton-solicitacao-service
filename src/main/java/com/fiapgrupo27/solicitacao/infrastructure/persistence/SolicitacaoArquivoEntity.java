@@ -14,8 +14,6 @@ public class SolicitacaoArquivoEntity {
     @Column(nullable = false)
     private Long idSolicitacao;
 
-    @Column(nullable = false)
-    private Long idSolicitante;
 
     @Column(nullable = false)
     private String nomeArquivo; // 🚀 Novo campo obrigatório
@@ -28,9 +26,8 @@ public class SolicitacaoArquivoEntity {
 
     public SolicitacaoArquivoEntity() {}
 
-    public SolicitacaoArquivoEntity(Long idSolicitacao,  Long idSolicitante, String nomeArquivo, String status, LocalDateTime dataInclusao) {
+    public SolicitacaoArquivoEntity(Long idSolicitacao, String nomeArquivo, String status, LocalDateTime dataInclusao) {
         this.idSolicitacao = idSolicitacao;
-        this.idSolicitante = idSolicitante;
         this.nomeArquivo = nomeArquivo;
         this.status = status;
         this.dataInclusao = dataInclusao;
@@ -47,13 +44,6 @@ public class SolicitacaoArquivoEntity {
         this.idSolicitacao = idSolicitacao;
     }
 
-    public Long getIdSolicitante() {
-        return idSolicitante;
-    }
-
-    public void setIdSolicitante(Long idSolicitante) {
-        this.idSolicitante = idSolicitante;
-    }
 
     public String getNomeArquivo() {
         return nomeArquivo;

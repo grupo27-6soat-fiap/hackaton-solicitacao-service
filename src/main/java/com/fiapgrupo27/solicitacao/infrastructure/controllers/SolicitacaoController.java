@@ -10,9 +10,13 @@ import com.fiapgrupo27.solicitacao.domain.entity.Solicitacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -34,10 +38,12 @@ public class SolicitacaoController {
     }
 
     @PostMapping
-    public CreateSolicitacaoResponse criarSolicitacao(@RequestParam("arquivos") List<MultipartFile> arquivos,
-                                   @RequestParam("solicitante") String solicitante) {
+    @PreAuthorize("hasRole('USER')")
+    public CreateSolicitacaoResponse criarSolicitacao(@RequestParam("arquivos") List<MultipartFile> arquivos, @AuthenticationPrincipal Jwt jwt) throws JsonProcessingException {
 
-        return solicitacaoDTOMapper.toResponse(createSolicitacaoInteractor.createSolicitacao(solicitacaoDTOMapper.toSolicitacao(solicitante), arquivos, solicitante));
+        String email = jwt.getClaim("email");
+        Solicitacao solicitacao = new Solicitacao(null,LocalDateTime.now(),email);
+        return solicitacaoDTOMapper.toResponse(createSolicitacaoInteractor.createSolicitacao(solicitacao, arquivos));
 
     }
 
@@ -46,14 +52,15 @@ public class SolicitacaoController {
             @PathVariable Long idSolicitacao,
             @PathVariable Long idArquivo,
             @RequestParam String status) {
-
         atualizarStatusSolicitacaoArquivoInteractor.execute(idSolicitacao, idArquivo, status);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<SolicitacaoResponseDTO>> obterSolicitacoes(@RequestParam(required = false) Long idSolicitante) {
-        List<SolicitacaoResponseDTO> solicitacoes = obterSolicitacoesInteractor.executeFull(idSolicitante);
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<SolicitacaoResponseDTO>> obterSolicitacoes(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getClaim("email");
+        List<SolicitacaoResponseDTO> solicitacoes = obterSolicitacoesInteractor.executeFull(email);
         return ResponseEntity.ok(solicitacoes);
     }
 }

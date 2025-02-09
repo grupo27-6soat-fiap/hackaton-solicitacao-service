@@ -9,8 +9,6 @@ public class SolicitacaoArquivo {
 
     private Long idSolicitacao;
 
-    private Long idSolicitante;
-
     private String nomeArquivo;
 
     private String status;
@@ -22,9 +20,8 @@ public class SolicitacaoArquivo {
     }
 
     // Construtor com argumentos
-    public SolicitacaoArquivo(Long idSolicitacao, Long idSolicitante, String nomeArquivo, String status, LocalDateTime dataInclusao, Long idArquivo) {
+    public SolicitacaoArquivo(Long idSolicitacao, String nomeArquivo, String status, LocalDateTime dataInclusao, Long idArquivo) {
         this.idSolicitacao = idSolicitacao;
-        this.idSolicitante = idSolicitante;
         this.nomeArquivo = nomeArquivo;
         this.status = status;
         this.dataInclusao = dataInclusao;
@@ -42,14 +39,6 @@ public class SolicitacaoArquivo {
 
     public void setIdSolicitacao(Long idSolicitacao) {
         this.idSolicitacao = idSolicitacao;
-    }
-
-    public Long getIdSolicitante() {
-        return idSolicitante;
-    }
-
-    public void setIdSolicitante(Long idSolicitante) {
-        this.idSolicitante = idSolicitante;
     }
 
     public String getNomeArquivo() {

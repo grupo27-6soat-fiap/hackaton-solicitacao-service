@@ -24,9 +24,9 @@ public class SQSGateway implements MensagemGateway {
     }
 
     @Override
-    public void enviarMensagem(SolicitacaoArquivo arquivo, String fileUrl, String solicitante) {
+    public void enviarMensagem(SolicitacaoArquivo arquivo, String fileUrl) {
         try {
-            Map<String, Object> mensagem = criarMensagem(arquivo, fileUrl, solicitante);
+            Map<String, Object> mensagem = criarMensagem(arquivo, fileUrl);
             String mensagemJson = objectMapper.writeValueAsString(mensagem);
 
             SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
@@ -41,13 +41,12 @@ public class SQSGateway implements MensagemGateway {
         }
     }
 
-    private Map<String, Object> criarMensagem(SolicitacaoArquivo arquivo, String fileUrl , String solicitante) {
+    private Map<String, Object> criarMensagem(SolicitacaoArquivo arquivo, String fileUrl ) {
         Map<String, Object> mensagem = new HashMap<>();
         mensagem.put("idSolicitacao", arquivo.getIdSolicitacao());
         mensagem.put("nomeArquivo", arquivo.getNomeArquivo());
         mensagem.put("idArquivo", arquivo.getIdArquivo());
         mensagem.put("conteudoArquivo", fileUrl);
-        mensagem.put("solicitante", solicitante);
         return mensagem;
     }
 }

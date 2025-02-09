@@ -37,7 +37,7 @@ class SQSGatewayTest {
     @Test
     void enviarMensagem_DeveEnviarMensagemParaSQS() throws Exception {
         // Criando um objeto SolicitacaoArquivo válido
-        SolicitacaoArquivo arquivo = new SolicitacaoArquivo(1L, 1L, "documento.mp4", "Ativo", LocalDateTime.now(), 1L);
+        SolicitacaoArquivo arquivo = new SolicitacaoArquivo(1L,"documento.mp4", "Ativo", LocalDateTime.now(), 1L);
         String fileUrl = "https://meusarquivos.com/documento.mp4";
         String solicitante = "Usuário Teste";
 
@@ -54,7 +54,7 @@ class SQSGatewayTest {
         when(objectMapper.writeValueAsString(any(Map.class))).thenReturn(mensagemJson);
 
         // Executando o método que estamos testando
-        sqsGateway.enviarMensagem(arquivo, fileUrl, solicitante);
+        sqsGateway.enviarMensagem(arquivo, fileUrl);
 
         // Verificando se o SQS recebeu a mensagem corretamente
         verify(sqsClient, times(1)).sendMessage(any(SendMessageRequest.class));

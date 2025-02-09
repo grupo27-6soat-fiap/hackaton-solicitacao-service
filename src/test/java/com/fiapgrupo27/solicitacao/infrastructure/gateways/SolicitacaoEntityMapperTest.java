@@ -23,9 +23,9 @@ class SolicitacaoEntityMapperTest {
         // Arrange
         Solicitacao solicitacaoDomain = new Solicitacao(
                 1L,
-                123L,
-                "PENDING",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                "email"
+
         );
 
         // Act
@@ -34,8 +34,7 @@ class SolicitacaoEntityMapperTest {
         // Assert
         assertNotNull(entity);
         assertEquals(solicitacaoDomain.getIdSolicitacao(), entity.getIdSolicitacao());
-        assertEquals(solicitacaoDomain.getIdSolicitante(), entity.getIdSolicitante());
-        assertEquals(solicitacaoDomain.getStatus(), entity.getStatus());
+        assertEquals(solicitacaoDomain.getEmail(), entity.getEmail());
         assertEquals(solicitacaoDomain.getDataInclusao(), entity.getDataInclusao());
     }
 
@@ -44,9 +43,9 @@ class SolicitacaoEntityMapperTest {
         // Arrange
         SolicitacaoEntity entity = new SolicitacaoEntity(
                 1L,
-                123L,
-                "PENDING",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                "email"
+
         );
 
         // Act
@@ -55,8 +54,6 @@ class SolicitacaoEntityMapperTest {
         // Assert
         assertNotNull(solicitacaoDomain);
         assertEquals(entity.getIdSolicitacao(), solicitacaoDomain.getIdSolicitacao());
-        assertEquals(entity.getIdSolicitante(), solicitacaoDomain.getIdSolicitante());
-        assertEquals(entity.getStatus(), solicitacaoDomain.getStatus());
         assertEquals(entity.getDataInclusao(), solicitacaoDomain.getDataInclusao());
     }
 
@@ -65,9 +62,9 @@ class SolicitacaoEntityMapperTest {
         // Arrange
         SolicitacaoEntity entity = new SolicitacaoEntity(
                 1L,
-                123L,
-                "PENDING",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                "email"
+
         );
 
         // Act
@@ -76,8 +73,7 @@ class SolicitacaoEntityMapperTest {
         // Assert
         assertNotNull(solicitacaoDomain);
         assertEquals(entity.getIdSolicitacao(), solicitacaoDomain.getIdSolicitacao());
-        assertEquals(entity.getIdSolicitante(), solicitacaoDomain.getIdSolicitante());
-        assertEquals(entity.getStatus(), solicitacaoDomain.getStatus());
+        assertEquals(entity.getEmail(), solicitacaoDomain.getEmail());
         assertEquals(entity.getDataInclusao(), solicitacaoDomain.getDataInclusao());
     }
 }

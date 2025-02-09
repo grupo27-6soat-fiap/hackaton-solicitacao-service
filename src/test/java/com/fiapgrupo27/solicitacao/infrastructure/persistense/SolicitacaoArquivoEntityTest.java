@@ -16,7 +16,6 @@ class SolicitacaoArquivoEntityTest {
     void setUp() {
         solicitacaoArquivoEntity = new SolicitacaoArquivoEntity(
                 1L, // idSolicitacao
-                2L, // idSolicitante
                 "test-file.txt", // nomeArquivo
                 "PENDENTE", // status
                 LocalDateTime.now() // dataInclusao
@@ -34,10 +33,6 @@ class SolicitacaoArquivoEntityTest {
         assertEquals(1L, solicitacaoArquivoEntity.getIdSolicitacao());
     }
 
-    @Test
-    void testGetIdSolicitante() {
-        assertEquals(2L, solicitacaoArquivoEntity.getIdSolicitante());
-    }
 
     @Test
     void testGetNomeArquivo() {
@@ -58,13 +53,11 @@ class SolicitacaoArquivoEntityTest {
     @Test
     void testSetters() {
         solicitacaoArquivoEntity.setIdSolicitacao(3L);
-        solicitacaoArquivoEntity.setIdSolicitante(4L);
         solicitacaoArquivoEntity.setNomeArquivo("new-file.txt");
         solicitacaoArquivoEntity.setStatus("CONCLUIDO");
         solicitacaoArquivoEntity.setDataInclusao(LocalDateTime.now().minusDays(1));
 
         assertEquals(3L, solicitacaoArquivoEntity.getIdSolicitacao());
-        assertEquals(4L, solicitacaoArquivoEntity.getIdSolicitante());
         assertEquals("new-file.txt", solicitacaoArquivoEntity.getNomeArquivo());
         assertEquals("CONCLUIDO", solicitacaoArquivoEntity.getStatus());
         assertNotNull(solicitacaoArquivoEntity.getDataInclusao());

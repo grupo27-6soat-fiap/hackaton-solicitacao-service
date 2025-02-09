@@ -28,32 +28,31 @@ public class ObterSolicitacoesInteractorTest {
     @Test
     public void testExecute() {
         // Dados de teste
-        Solicitacao solicitacao1 = new Solicitacao(1L, 1L, "PENDENTE", LocalDateTime.now());
-        Solicitacao solicitacao2 = new Solicitacao(2L, 1L, "FINALIZADO", LocalDateTime.now());
+        Solicitacao solicitacao1 = new Solicitacao(1L, LocalDateTime.now(), "email" );
+        Solicitacao solicitacao2 = new Solicitacao(2L, LocalDateTime.now(), "email");
         
         // Comportamento esperado do mock
-        when(solicitacaoGateway.obterSolicitacoes(1L)).thenReturn(Arrays.asList(solicitacao1, solicitacao2));
+        when(solicitacaoGateway.obterSolicitacoes("email")).thenReturn(Arrays.asList(solicitacao1, solicitacao2));
 
         // Chamada ao método que estamos testando
-        List<Solicitacao> result = obterSolicitacoesInteractor.execute(1L);
+        List<Solicitacao> result = obterSolicitacoesInteractor.execute("email");
 
         // Validações
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(1L, result.get(0).getIdSolicitacao());
-        assertEquals("PENDENTE", result.get(0).getStatus());
         assertEquals(2L, result.get(1).getIdSolicitacao());
-        assertEquals("FINALIZADO", result.get(1).getStatus());
+
 
         // Verificação da interação com o mock
-        verify(solicitacaoGateway).obterSolicitacoes(1L);
+        verify(solicitacaoGateway).obterSolicitacoes("email");
     }
 
     @Test
     public void testExecuteFull() {
         // Dados de teste com Solicitacao
-        Solicitacao solicitacao1 = new Solicitacao(1L, 1L, "PENDENTE", LocalDateTime.now());
-        Solicitacao solicitacao2 = new Solicitacao(2L, 1L, "FINALIZADO", LocalDateTime.now());
+        Solicitacao solicitacao1 = new Solicitacao(1L, LocalDateTime.now(), "email");
+        Solicitacao solicitacao2 = new Solicitacao(2L, LocalDateTime.now(), "email");
 
         // Criando uma lista de arquivos vazia para os testes (não estamos testando arquivos neste momento)
         List<SolicitacaoArquivoDTO> arquivos = Arrays.asList();
@@ -61,35 +60,29 @@ public class ObterSolicitacoesInteractorTest {
         // Convertendo Solicitacao para SolicitacaoResponseDTO
         SolicitacaoResponseDTO response1 = new SolicitacaoResponseDTO(
                 solicitacao1.getIdSolicitacao(),
-                solicitacao1.getIdSolicitante(),
-                solicitacao1.getStatus(),
                 solicitacao1.getDataInclusao(),
                 arquivos
         );
 
         SolicitacaoResponseDTO response2 = new SolicitacaoResponseDTO(
                 solicitacao2.getIdSolicitacao(),
-                solicitacao2.getIdSolicitante(),
-                solicitacao2.getStatus(),
                 solicitacao2.getDataInclusao(),
                 arquivos
         );
 
         // Comportamento esperado do mock para obterSolicitacoesComArquivos
-        when(solicitacaoGateway.obterSolicitacoesComArquivos(1L)).thenReturn(Arrays.asList(response1, response2));
+        when(solicitacaoGateway.obterSolicitacoesComArquivos("email")).thenReturn(Arrays.asList(response1, response2));
 
         // Chamada ao método que estamos testando
-        List<SolicitacaoResponseDTO> result = obterSolicitacoesInteractor.executeFull(1L);
+        List<SolicitacaoResponseDTO> result = obterSolicitacoesInteractor.executeFull("email");
 
         // Validações
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(1L, result.get(0).getId());  // Ajuste de acordo com o nome do método correto
-        assertEquals("PENDENTE", result.get(0).getStatus());
         assertEquals(2L, result.get(1).getId());
-        assertEquals("FINALIZADO", result.get(1).getStatus());
 
         // Verificação da interação com o mock
-        verify(solicitacaoGateway).obterSolicitacoesComArquivos(1L);
+        verify(solicitacaoGateway).obterSolicitacoesComArquivos("email");
     }
 }

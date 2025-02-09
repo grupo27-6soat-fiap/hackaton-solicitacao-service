@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface SolicitacaoGateway {
     Solicitacao createSolicitacao(Solicitacao solicitacao);
-    List<Solicitacao> obterSolicitacoes(Long idSolicitante);
-    List<SolicitacaoResponseDTO> obterSolicitacoesComArquivos(Long idSolicitante);
+    List<Solicitacao> obterSolicitacoes(String email);
+    List<SolicitacaoResponseDTO> obterSolicitacoesComArquivos(String email);
 
 
 

@@ -25,14 +25,25 @@ dependencies {
     implementation("software.amazon.awssdk:sqs:2.20.20")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.postgresql:postgresql:42.5.1")
-    implementation("software.amazon.awssdk:apache-client:2.20.20") 
+    implementation("software.amazon.awssdk:apache-client:2.20.20")
+//    security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     testImplementation("org.mockito:mockito-core:4.0.0") // Para Mockito
     testImplementation("org.mockito:mockito-junit-jupiter:5.5.0")  // Para integração com JUnit 5
+    testImplementation("org.springframework.security:spring-security-test")
+
 
 }
+
+
+
 
 tasks.test {
     useJUnitPlatform()
