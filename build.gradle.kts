@@ -16,12 +16,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
+//    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     // Dependências do AWS SDK para S3 e SQS
     implementation("software.amazon.awssdk:s3:2.20.20")
     implementation("software.amazon.awssdk:sqs:2.20.20")
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
 
     // Banco de Dados (ajuste conforme necessário)
     implementation("org.postgresql:postgresql:42.5.1")

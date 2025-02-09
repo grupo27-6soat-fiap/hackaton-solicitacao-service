@@ -24,21 +24,32 @@ public class S3GatewayImpl implements S3Gateway {
 
     private final S3Client s3Client;
     private final String bucketName;
+    private final String aws_region;
+    private final String aws_accesskey;
+    private final String aws_keyid;
+    private final String aws_endpoint;
 
-    public S3GatewayImpl(@Value("${cloud.aws.s3.bucket}") String bucketName) {
+    public S3GatewayImpl(@Value("${cloud.aws.s3.bucket}") String bucketName, @Value("${cloud.aws.region}")String awsRegion, @Value("${cloud.aws.accesskey}")String awsAccesskey, @Value("${cloud.aws.keyid}")String awsKeyid, @Value("${cloud.aws.endpoint}")String awsEndpoint) {
         this.bucketName = bucketName;
+        this.aws_region = awsRegion;
+        this.aws_accesskey = awsAccesskey;
+        this.aws_keyid = awsKeyid;
+        this.aws_endpoint = awsEndpoint;
 
         this.s3Client = S3Client.builder()
-                .region(Region.US_EAST_1)
+                .region(Region.of(System.getenv().getOrDefault("AWS_REGION", aws_region)))
                 .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create("test", "test")))
-                .httpClient(ApacheHttpClient.create())  // 🔥 Usa um cliente HTTP compatível
+                        AwsBasicCredentials.create(
+                                System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", aws_keyid),
+                                System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", aws_accesskey)
+                        )
+                ))
+                .httpClient(ApacheHttpClient.create())
                 .serviceConfiguration(S3Configuration.builder()
-                        .pathStyleAccessEnabled(true) // 🔥 Força Path-Style Access
+                        .pathStyleAccessEnabled(true)
                         .build())
-                .endpointOverride(URI.create("http://localhost:4566")) // 🔥 LocalStack como endpoint
+                .endpointOverride(URI.create(System.getenv().getOrDefault("AWS_ENDPOINT_URL", aws_endpoint)))
                 .build();
-
         // Criar bucket se não existir
         createBucketIfNotExists();
     }
@@ -65,7 +76,8 @@ public class S3GatewayImpl implements S3Gateway {
     }
 
     private String getFileUrl(String fileName) {
-        return "http://localhost:4566/" + bucketName + "/" + fileName; // 🔥 Retorna URL do arquivo salvo
+        return aws_endpoint + "/" + bucketName + "/" + fileName; // 🔥 Retorna URL do arquivo salvo
     }
+
 
 }
