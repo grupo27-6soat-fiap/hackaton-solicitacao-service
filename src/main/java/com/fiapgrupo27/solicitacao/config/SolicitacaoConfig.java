@@ -68,6 +68,10 @@ public class SolicitacaoConfig {
     }
 
     @Bean
+    public S3GatewayImpl s3GatewayImpl(@Value("${cloud.aws.s3.bucket}") String bucketName, @Value("${cloud.aws.region}")String awsRegion, @Value("${cloud.aws.accesskey}")String awsAccesskey, @Value("${cloud.aws.keyid}")String awsKeyid, @Value("${cloud.aws.endpoint}")String awsEndpoint) {
+        return new S3GatewayImpl(bucketName, awsRegion, awsAccesskey, awsKeyid, awsEndpoint);
+    }
+    @Bean
     public ObterSolicitacoesInteractor obterSolicitacoesInteractor(
             SolicitacaoGateway solicitacaoGateway
     ) {

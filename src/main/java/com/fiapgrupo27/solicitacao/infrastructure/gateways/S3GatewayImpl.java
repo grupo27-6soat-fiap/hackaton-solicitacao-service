@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Paths;
 
-@Component
+
 public class S3GatewayImpl implements S3Gateway {
 
     private final S3Client s3Client;
@@ -29,6 +29,8 @@ public class S3GatewayImpl implements S3Gateway {
     private final String aws_accesskey;
     private final String aws_keyid;
     private final String aws_endpoint;
+
+
 
     public S3GatewayImpl(@Value("${cloud.aws.s3.bucket}") String bucketName, @Value("${cloud.aws.region}")String awsRegion, @Value("${cloud.aws.accesskey}")String awsAccesskey, @Value("${cloud.aws.keyid}")String awsKeyid, @Value("${cloud.aws.endpoint}")String awsEndpoint) {
         this.bucketName = bucketName;
@@ -56,9 +58,13 @@ public class S3GatewayImpl implements S3Gateway {
     }
 
      // Novo construtor para testes
-     public S3GatewayImpl(String bucketName, S3Client s3Client) {
+     public S3GatewayImpl(String bucketName, S3Client s3Client, String awsRegion, String awsAccesskey,String awsKeyid, String awsEndpoint) {
         this.bucketName = bucketName;
         this.s3Client = s3Client;
+        this.aws_region = awsRegion;
+        this.aws_accesskey = awsAccesskey;
+        this.aws_keyid = awsKeyid;
+        this.aws_endpoint = awsEndpoint;
     }
 
     public void createBucketIfNotExists() {
