@@ -75,4 +75,9 @@ public class SolicitacaoArquivo {
     public void setDataInclusao(LocalDateTime dataInclusao) {
         this.dataInclusao = dataInclusao;
     }
+    
+    public void setIdArquivo(Long idArquivo) {
+        this.idArquivo = idArquivo;
+    }
+
 }

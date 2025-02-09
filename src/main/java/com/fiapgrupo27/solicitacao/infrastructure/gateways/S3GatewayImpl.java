@@ -1,6 +1,7 @@
 package com.fiapgrupo27.solicitacao.infrastructure.gateways;
 
 import com.fiapgrupo27.solicitacao.application.gateways.S3Gateway;
+import software.amazon.awssdk.services.s3.S3Client;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -43,7 +44,13 @@ public class S3GatewayImpl implements S3Gateway {
         createBucketIfNotExists();
     }
 
-    private void createBucketIfNotExists() {
+     // Novo construtor para testes
+     public S3GatewayImpl(String bucketName, S3Client s3Client) {
+        this.bucketName = bucketName;
+        this.s3Client = s3Client;
+    }
+
+    public void createBucketIfNotExists() {
         s3Client.createBucket(CreateBucketRequest.builder().bucket(bucketName).build());
     }
 
