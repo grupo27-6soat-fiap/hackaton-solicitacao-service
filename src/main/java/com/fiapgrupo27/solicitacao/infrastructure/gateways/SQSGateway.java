@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
+import software.amazon.awssdk.services.sqs.model.GetQueueUrlRequest;
+import software.amazon.awssdk.services.sqs.model.QueueDoesNotExistException;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import java.util.HashMap;
@@ -14,13 +17,30 @@ import java.util.Map;
 @Component
 public class SQSGateway implements MensagemGateway {
     private final SqsClient sqsClient;
-    private final String queueUrl;
+    private String queueUrl;
     private final ObjectMapper objectMapper;
 
     public SQSGateway(SqsClient sqsClient, @Value("${aws.sqs.queue-url}") String queueUrl, ObjectMapper objectMapper) {
         this.sqsClient = sqsClient;
         this.queueUrl = queueUrl;
         this.objectMapper = objectMapper;
+        ensureQueueExists();
+    }
+    private void ensureQueueExists() {
+        try {
+            GetQueueUrlRequest getQueueUrlRequest = GetQueueUrlRequest.builder()
+                    .queueName(getQueueNameFromUrl(queueUrl))
+                    .build();
+            this.queueUrl = sqsClient.getQueueUrl(getQueueUrlRequest).queueUrl();
+        } catch (QueueDoesNotExistException e) {
+            CreateQueueRequest createQueueRequest = CreateQueueRequest.builder()
+                    .queueName(getQueueNameFromUrl(queueUrl))
+                    .build();
+            this.queueUrl = sqsClient.createQueue(createQueueRequest).queueUrl();
+        }
+    }
+    private String getQueueNameFromUrl(String queueUrl) {
+        return queueUrl.substring(queueUrl.lastIndexOf("/") + 1);
     }
 
     @Override
