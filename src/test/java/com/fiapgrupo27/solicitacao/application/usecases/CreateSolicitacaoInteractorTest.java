@@ -48,7 +48,7 @@ class CreateSolicitacaoInteractorTest {
     @Test
     public void testCreateSolicitacao() throws IOException {
         // Criando dados de teste
-        Solicitacao solicitacao = new Solicitacao(1L, 1L, "Descrição", LocalDateTime.now());
+        Solicitacao solicitacao = new Solicitacao(1L, LocalDateTime.now(), "email");
         String solicitante = "Usuario Teste";
 
         // Mock MultipartFile
@@ -64,11 +64,11 @@ class CreateSolicitacaoInteractorTest {
         when(s3Gateway.uploadFile(anyString(), any(), anyLong())).thenReturn("http://example.com/file-url");
 
         // Criando um objeto válido de SolicitacaoArquivo para ser salvo
-        SolicitacaoArquivo solicitacaoArquivoMock = new SolicitacaoArquivo(1L, 1L, "arquivo.txt", "PENDENTE", LocalDateTime.now(), 100L);
+        SolicitacaoArquivo solicitacaoArquivoMock = new SolicitacaoArquivo(1L, "arquivo.txt", "PENDENTE", LocalDateTime.now(), 1L);
         when(solicitacaoArquivoGateway.salvar(any(SolicitacaoArquivo.class))).thenReturn(solicitacaoArquivoMock);
 
         // Executa o método de teste
-        Solicitacao result = createSolicitacaoInteractor.createSolicitacao(solicitacao, Collections.singletonList(arquivo), solicitante);
+        Solicitacao result = createSolicitacaoInteractor.createSolicitacao(solicitacao, Collections.singletonList(arquivo));
 
         // Validações
         assertNotNull(result);
@@ -77,7 +77,7 @@ class CreateSolicitacaoInteractorTest {
         verify(s3Gateway).uploadFile(anyString(), any(), anyLong());
         
         // Aqui garantimos que um objeto válido está sendo passado
-        verify(mensagemGateway).enviarMensagem(eq(solicitacaoArquivoMock), eq("http://example.com/file-url"), eq(solicitante));
+        verify(mensagemGateway).enviarMensagem(eq(solicitacaoArquivoMock), eq("http://example.com/file-url"));
 
         // Validações do arquivo
         verify(arquivo).getOriginalFilename();
@@ -87,7 +87,7 @@ class CreateSolicitacaoInteractorTest {
     @Test
     void testCreateSolicitacaoIOException() throws IOException {
         // Configurando os mocks para simular a falha na leitura do arquivo
-        Solicitacao solicitacao = new Solicitacao(1L, 1L, "PENDENTE", null);
+        Solicitacao solicitacao = new Solicitacao(1L, LocalDateTime.now(), "email");
         List<MultipartFile> arquivos = List.of(arquivo);
         String solicitante = "solicitante@dominio.com";
 
@@ -97,7 +97,7 @@ class CreateSolicitacaoInteractorTest {
 
         // Verificando se o RuntimeException é lançada corretamente
         assertThrows(RuntimeException.class, () -> {
-            createSolicitacaoInteractor.createSolicitacao(solicitacao, arquivos, solicitante);
+            createSolicitacaoInteractor.createSolicitacao(solicitacao, arquivos);
         });
 
         // Verificando se o método do S3 não foi chamado devido ao erro

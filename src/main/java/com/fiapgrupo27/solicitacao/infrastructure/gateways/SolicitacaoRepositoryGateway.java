@@ -32,9 +32,9 @@ public class SolicitacaoRepositoryGateway implements SolicitacaoGateway {
     }
 
     @Override
-    public List<Solicitacao> obterSolicitacoes(Long idSolicitante) {
-        if (idSolicitante != null) {
-            return solicitacaoRepository.findByIdSolicitante(idSolicitante)
+    public List<Solicitacao> obterSolicitacoes(String email) {
+        if (email != null) {
+            return solicitacaoRepository.findByEmail(email)
                     .stream()
                     .map(SolicitacaoEntityMapper::toDomain)
                     .collect(Collectors.toList());
@@ -46,13 +46,11 @@ public class SolicitacaoRepositoryGateway implements SolicitacaoGateway {
     }
 
     @Override
-    public List<SolicitacaoResponseDTO> obterSolicitacoesComArquivos(Long idSolicitante) {
-        return solicitacaoRepository.findByIdSolicitante(idSolicitante)
+    public List<SolicitacaoResponseDTO> obterSolicitacoesComArquivos(String email) {
+        return solicitacaoRepository.findByEmail(email)
                 .stream()
                 .map(solicitacao -> new SolicitacaoResponseDTO(
                         solicitacao.getIdSolicitacao(),
-                        solicitacao.getIdSolicitante(),
-                        solicitacao.getStatus(),
                         solicitacao.getDataInclusao(),
                         arquivoRepository.findByIdSolicitacao(solicitacao.getIdSolicitacao())
                                 .stream()

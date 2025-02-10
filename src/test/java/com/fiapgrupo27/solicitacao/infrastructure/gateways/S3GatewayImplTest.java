@@ -20,6 +20,10 @@ class S3GatewayImplTest {
     private final String testBucketName = "test-bucket";
     private final String testFileName = "test-file.mp4";
     private final String testData = "Hello, World!";
+    private final String awsRegion = "us-east-1";
+    private final String awsAccesskey = "test";
+    private final String awsKeyid = "test";
+    private final String awsEndpoint = "test";
     private final InputStream testDataStream = new ByteArrayInputStream(testData.getBytes());
 
     @BeforeEach
@@ -27,8 +31,9 @@ class S3GatewayImplTest {
         // Criar mock do cliente S3
         mockS3Client = mock(S3Client.class);
         // Inicializar a classe S3GatewayImpl com o mock
-        s3GatewayImpl = new S3GatewayImpl(testBucketName, mockS3Client);
+        s3GatewayImpl = new S3GatewayImpl(testBucketName, mockS3Client,awsRegion, awsAccesskey, awsKeyid, awsEndpoint );
     }
+
 
     @Test
     void testUploadFileSuccess() {
@@ -45,8 +50,12 @@ class S3GatewayImplTest {
 
     @Test
     void testCreateBucketIfNotExists() {
+        String awsRegion = "us-east-1";
+        String awsAccesskey = "test";
+        String awsKeyid = "test";
+        String awsEndpoint = "test";
         // Verificar se o método createBucket foi chamado durante a inicialização
-        s3GatewayImpl = new S3GatewayImpl(testBucketName, mockS3Client);
+        s3GatewayImpl = new S3GatewayImpl(testBucketName, mockS3Client, awsRegion, awsAccesskey, awsKeyid, awsEndpoint);
 
         // Verificar se o método createBucket foi chamado uma vez
         assertNotNull(s3GatewayImpl);

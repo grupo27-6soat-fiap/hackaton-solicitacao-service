@@ -10,7 +10,6 @@ public class SolicitacaoArquivoEntityMapper {
     public static SolicitacaoArquivoEntity toEntity(SolicitacaoArquivo solicitacaoArquivo) {
         return new SolicitacaoArquivoEntity(
                 solicitacaoArquivo.getIdSolicitacao(),
-                solicitacaoArquivo.getIdSolicitante(),
                 solicitacaoArquivo.getNomeArquivo(),
                 solicitacaoArquivo.getStatus(),
                 solicitacaoArquivo.getDataInclusao()
@@ -19,7 +18,6 @@ public class SolicitacaoArquivoEntityMapper {
 
     SolicitacaoArquivo toEntity(SolicitacaoArquivoEntity solicitacaoArquivoEntity) {
         return new SolicitacaoArquivo(solicitacaoArquivoEntity.getIdSolicitacao(),
-                                      solicitacaoArquivoEntity.getIdSolicitante(),
                                       solicitacaoArquivoEntity.getNomeArquivo(),
                                       solicitacaoArquivoEntity.getStatus(),
                                       solicitacaoArquivoEntity.getDataInclusao(),

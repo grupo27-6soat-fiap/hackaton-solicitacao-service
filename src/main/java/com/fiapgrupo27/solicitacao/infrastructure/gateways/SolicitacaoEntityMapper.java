@@ -7,20 +7,19 @@ import java.time.LocalDateTime;
 
 public class SolicitacaoEntityMapper {
     SolicitacaoEntity toSolicitacaoEntity(Solicitacao solicitacaoDomnainObj) {
-        return new SolicitacaoEntity(solicitacaoDomnainObj.getIdSolicitacao(), solicitacaoDomnainObj.getIdSolicitante(), solicitacaoDomnainObj.getStatus(), solicitacaoDomnainObj.getDataInclusao() );
+        return new SolicitacaoEntity(solicitacaoDomnainObj.getIdSolicitacao(), solicitacaoDomnainObj.getDataInclusao(), solicitacaoDomnainObj.getEmail() );
 
     }
 
     Solicitacao toSolicitacaoDomainObj(SolicitacaoEntity solicitacaoEntity) {
-        return new Solicitacao(solicitacaoEntity.getIdSolicitacao(), solicitacaoEntity.getIdSolicitante(), solicitacaoEntity.getStatus(), solicitacaoEntity.getDataInclusao());
+        return new Solicitacao(solicitacaoEntity.getIdSolicitacao(), solicitacaoEntity.getDataInclusao(), solicitacaoEntity.getEmail());
     }
 
     public static Solicitacao toDomain(SolicitacaoEntity entity) {
         return new Solicitacao(
                 entity.getIdSolicitacao(),
-                entity.getIdSolicitante(),
-                entity.getStatus(),
-                entity.getDataInclusao()
+                entity.getDataInclusao(),
+                entity.getEmail()
         );
     }
 

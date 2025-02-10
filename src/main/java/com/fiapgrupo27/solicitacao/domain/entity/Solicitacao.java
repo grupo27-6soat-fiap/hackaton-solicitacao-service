@@ -5,15 +5,23 @@ import java.time.LocalDateTime;
 public class Solicitacao {
 
     private Long idSolicitacao;
-    private Long idSolicitante;
-    private String status;
+    private String email;
     private LocalDateTime dataInclusao;
 
-    public Solicitacao(Long idSolicitacao, Long idSolicitante, String status, LocalDateTime dataInclusao) {
+    public Solicitacao(Long idSolicitacao,
+                       LocalDateTime dataInclusao,
+                       String email) {
         this.idSolicitacao = idSolicitacao;
-        this.idSolicitante = idSolicitante;
-        this.status = status;
         this.dataInclusao = dataInclusao;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getIdSolicitacao() {
@@ -24,21 +32,7 @@ public class Solicitacao {
         this.idSolicitacao = idSolicitacao;
     }
 
-    public Long getIdSolicitante() {
-        return idSolicitante;
-    }
 
-    public void setIdSolicitante(Long idSolicitante) {
-        this.idSolicitante = idSolicitante;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public LocalDateTime getDataInclusao() {
         return dataInclusao;
