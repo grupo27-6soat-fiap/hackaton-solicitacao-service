@@ -82,8 +82,8 @@ class SolicitacaoControllerTest {
         // Dados simulados
         SolicitacaoArquivoDTO arquivoDTO = new SolicitacaoArquivoDTO(1L, "Arquivo 1", "PENDENTE");
         List<SolicitacaoResponseDTO> solicitacoes = Arrays.asList(
-                new SolicitacaoResponseDTO(1L, LocalDateTime.now(), Arrays.asList(arquivoDTO) ),
-                new SolicitacaoResponseDTO(2L, LocalDateTime.now(), Arrays.asList(arquivoDTO))
+                new SolicitacaoResponseDTO(1L, LocalDateTime.now(), Arrays.asList(arquivoDTO), "email" ),
+                new SolicitacaoResponseDTO(2L, LocalDateTime.now(), Arrays.asList(arquivoDTO), "email")
         );
 
         String email = "email";

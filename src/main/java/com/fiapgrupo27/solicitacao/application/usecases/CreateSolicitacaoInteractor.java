@@ -41,7 +41,7 @@ public class CreateSolicitacaoInteractor {
             try {
                 String fileUrl = s3Gateway.uploadFile(nomeArquivoAlterado, arquivo.getInputStream(), arquivo.getSize());
 
-                mensagemGateway.enviarMensagem(solicitacaoArquivoSalva, fileUrl);
+                mensagemGateway.enviarMensagem(solicitacaoArquivoSalva, fileUrl, solicitacao.getEmail());
 
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -41,7 +41,7 @@ public class SolicitacaoConfig {
         this.aws_region = aws_region;
         this.aws_accesskey = aws_accesskey;
         this.aws_keyid = aws_keyid;
-        this.aws_endpoint = aws_endpoint;
+        this.aws_endpoint = System.getenv().getOrDefault("AWS_ENDPOINT_URL", aws_endpoint);
     }
 
     @Bean
@@ -69,7 +69,16 @@ public class SolicitacaoConfig {
 
     @Bean
     public S3GatewayImpl s3GatewayImpl(@Value("${cloud.aws.s3.bucket}") String bucketName, @Value("${cloud.aws.region}")String awsRegion, @Value("${cloud.aws.accesskey}")String awsAccesskey, @Value("${cloud.aws.keyid}")String awsKeyid, @Value("${cloud.aws.endpoint}")String awsEndpoint) {
-        return new S3GatewayImpl(bucketName, awsRegion, awsAccesskey, awsKeyid, awsEndpoint);
+        String bucket = System.getenv().getOrDefault("AWS_S3_BUCKET_NAME", bucketName);
+        String newEndpoint = System.getenv().getOrDefault("AWS_ENDPOINT_URL", awsEndpoint);
+
+        if (newEndpoint.contains("amazonaws.com")) {
+            newEndpoint = null;
+        }else{
+            newEndpoint = aws_endpoint;
+        }
+        System.out.println(" ========== S3GatewayImpl ============" + newEndpoint);
+        return new S3GatewayImpl(bucket, awsRegion, awsAccesskey, awsKeyid, newEndpoint);
     }
     @Bean
     public ObterSolicitacoesInteractor obterSolicitacoesInteractor(
@@ -102,16 +111,31 @@ public class SolicitacaoConfig {
 
     @Bean
     public SqsClient sqsClient() {
-        return SqsClient.builder()
-                .endpointOverride(URI.create(System.getenv().getOrDefault("AWS_ENDPOINT_URL", aws_endpoint)))
-                .region(Region.of(System.getenv().getOrDefault("AWS_REGION", aws_region)))
-                .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(
-                                System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", aws_keyid),
-                                System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", aws_accesskey)
-                        )
-                ))
-                .build();
+        if (aws_endpoint.contains("amazonaws.com")) {
+            return SqsClient.builder()
+//                .endpointOverride(URI.create(System.getenv().getOrDefault("AWS_ENDPOINT_URL", aws_endpoint)))
+                    .region(Region.of(System.getenv().getOrDefault("AWS_REGION", aws_region)))
+                    .credentialsProvider(StaticCredentialsProvider.create(
+                            AwsBasicCredentials.create(
+                                    System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", aws_keyid),
+                                    System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", aws_accesskey)
+                            )
+                    ))
+                    .build();
+
+        }else{
+            return SqsClient.builder()
+                .endpointOverride(URI.create(aws_endpoint))
+                    .region(Region.of(System.getenv().getOrDefault("AWS_REGION", aws_region)))
+                    .credentialsProvider(StaticCredentialsProvider.create(
+                            AwsBasicCredentials.create(
+                                    System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", aws_keyid),
+                                    System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", aws_accesskey)
+                            )
+                    ))
+                    .build();
+        }
+
     }
     @Bean
     SolicitacaoArquivoEntityMapper solicitacaoArquivoEntityMapper() {

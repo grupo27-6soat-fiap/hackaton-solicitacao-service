@@ -23,7 +23,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("software.amazon.awssdk:s3:2.20.20")
     implementation("software.amazon.awssdk:sqs:2.20.20")
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.postgresql:postgresql:42.5.1")
     implementation("software.amazon.awssdk:apache-client:2.20.20")
 //    security

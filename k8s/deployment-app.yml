@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: solicitacao-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: solicitacao
+  template:
+    metadata:
+      labels:
+        app: solicitacao
+    spec:
+      containers:
+        - name: solicitacao-service
+          image: grupo27/solicitacao-service:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "1"
+            requests:
+              cpu: "0.5"
+          env:
+            # Configuração da AWS
+            - name: AWS_REGION
+              value: "us-east-1"
+            - name: AWS_S3_BUCKET_NAME
+              value: "grupo27.6soat.fiap.video-processing-bucket"
+            - name: AWS_ENDPOINT_URL
+              value: "https://%s.%s.amazonaws.com"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: secret-access-key
+            - name: AWS_SQS_QUEUE_URL
+              value: "https://sqs.us-east-1.amazonaws.com/637423297410/video-processing-queue"
+
+            # Configuração do Banco RDS
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://rds-hackaton.c5o24sqc6d2p.us-east-1.rds.amazonaws.com:5432/hackaton_processamentovideos"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: SPRING_JPA_DATABASE_PLATFORM
+              value: "org.hibernate.dialect.PostgreSQLDialect"
+
+            # Configuração do Cognito
+            - name: COGNITO_ISSUER_URI
+              value: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4MMUQaW2H"
+            - name: COGNITO_JWK_SET_URI
+              value: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4MMUQaW2H/.well-known/jwks.json"
+
+            # Configuração do Servidor
+            - name: SERVER_PORT
+              value: "8080"

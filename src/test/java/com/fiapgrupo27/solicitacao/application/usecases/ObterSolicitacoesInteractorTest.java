@@ -61,13 +61,13 @@ public class ObterSolicitacoesInteractorTest {
         SolicitacaoResponseDTO response1 = new SolicitacaoResponseDTO(
                 solicitacao1.getIdSolicitacao(),
                 solicitacao1.getDataInclusao(),
-                arquivos
+                arquivos, "email"
         );
 
         SolicitacaoResponseDTO response2 = new SolicitacaoResponseDTO(
                 solicitacao2.getIdSolicitacao(),
                 solicitacao2.getDataInclusao(),
-                arquivos
+                arquivos, "email"
         );
 
         // Comportamento esperado do mock para obterSolicitacoesComArquivos

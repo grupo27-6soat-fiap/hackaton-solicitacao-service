@@ -10,10 +10,11 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.core.sync.RequestBody;
-
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 
 import java.io.InputStream;
@@ -33,26 +34,46 @@ public class S3GatewayImpl implements S3Gateway {
 
 
     public S3GatewayImpl(@Value("${cloud.aws.s3.bucket}") String bucketName, @Value("${cloud.aws.region}")String awsRegion, @Value("${cloud.aws.accesskey}")String awsAccesskey, @Value("${cloud.aws.keyid}")String awsKeyid, @Value("${cloud.aws.endpoint}")String awsEndpoint) {
-        this.bucketName = bucketName;
+        this.bucketName = System.getenv().getOrDefault("AWS_S3_BUCKET_NAME", bucketName);;
         this.aws_region = awsRegion;
         this.aws_accesskey = awsAccesskey;
         this.aws_keyid = awsKeyid;
-        this.aws_endpoint = awsEndpoint;
+        this.aws_endpoint = System.getenv().getOrDefault("AWS_ENDPOINT_URL", awsEndpoint);
+        System.out.println("AWWWWSSSSSSSSS ENDPOINT ======================================" + aws_endpoint);
+        if (aws_endpoint.contains("amazonaws.com")) {
+            this.s3Client = S3Client.builder()
+                    .region(Region.of(System.getenv().getOrDefault("AWS_REGION", aws_region)))
+                    .credentialsProvider(StaticCredentialsProvider.create(
+                            AwsBasicCredentials.create(
+                                    System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", aws_keyid),
+                                    System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", aws_accesskey)
+                            )
+                    ))
+                    .httpClient(ApacheHttpClient.create())
+                    .serviceConfiguration(S3Configuration.builder()
+                            .pathStyleAccessEnabled(true)
+                            .build())
+//                .endpointOverride(URI.create(System.getenv().getOrDefault("AWS_ENDPOINT_URL", aws_endpoint)))
+                    .build();
 
-        this.s3Client = S3Client.builder()
-                .region(Region.of(System.getenv().getOrDefault("AWS_REGION", aws_region)))
-                .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(
-                                System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", aws_keyid),
-                                System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", aws_accesskey)
-                        )
-                ))
-                .httpClient(ApacheHttpClient.create())
-                .serviceConfiguration(S3Configuration.builder()
-                        .pathStyleAccessEnabled(true)
-                        .build())
+        }else{
+            this.s3Client = S3Client.builder()
+                    .region(Region.of(System.getenv().getOrDefault("AWS_REGION", aws_region)))
+                    .credentialsProvider(StaticCredentialsProvider.create(
+                            AwsBasicCredentials.create(
+                                    System.getenv().getOrDefault("AWS_ACCESS_KEY_ID", aws_keyid),
+                                    System.getenv().getOrDefault("AWS_SECRET_ACCESS_KEY", aws_accesskey)
+                            )
+                    ))
+                    .httpClient(ApacheHttpClient.create())
+                    .serviceConfiguration(S3Configuration.builder()
+                            .pathStyleAccessEnabled(true)
+                            .build())
                 .endpointOverride(URI.create(System.getenv().getOrDefault("AWS_ENDPOINT_URL", aws_endpoint)))
-                .build();
+                    .build();
+        }
+
+
         // Criar bucket se não existir
         createBucketIfNotExists();
     }
@@ -67,8 +88,20 @@ public class S3GatewayImpl implements S3Gateway {
         this.aws_endpoint = awsEndpoint;
     }
 
-    public void createBucketIfNotExists() {
-        s3Client.createBucket(CreateBucketRequest.builder().bucket(bucketName).build());
+    private void createBucketIfNotExists() {
+        try {
+            // Verifica se o bucket já existe
+            s3Client.headBucket(HeadBucketRequest.builder().bucket(bucketName).build());
+            System.out.println("Bucket já existe: " + bucketName);
+        } catch (S3Exception e) {
+            if (e.statusCode() == 404) {
+                // Se não existir, cria o bucket
+                System.out.println("Criando bucket: " + bucketName);
+                s3Client.createBucket(CreateBucketRequest.builder().bucket(bucketName).build());
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override

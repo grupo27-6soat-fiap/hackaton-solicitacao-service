@@ -10,10 +10,11 @@ public class SolicitacaoResponseDTO {
     private List<SolicitacaoArquivoDTO> arquivos;
     private String email;
 
-    public SolicitacaoResponseDTO(Long id,  LocalDateTime dataInclusao, List<SolicitacaoArquivoDTO> arquivos) {
+    public SolicitacaoResponseDTO(Long id,  LocalDateTime dataInclusao, List<SolicitacaoArquivoDTO> arquivos, String email) {
         this.id = id;
         this.dataInclusao = dataInclusao;
         this.arquivos = arquivos;
+        this.email = email;
 
     }
 

@@ -54,7 +54,7 @@ class SQSGatewayTest {
         when(objectMapper.writeValueAsString(any(Map.class))).thenReturn(mensagemJson);
 
         // Executando o método que estamos testando
-        sqsGateway.enviarMensagem(arquivo, fileUrl);
+        sqsGateway.enviarMensagem(arquivo, fileUrl, "email");
 
         // Verificando se o SQS recebeu a mensagem corretamente
         verify(sqsClient, times(1)).sendMessage(any(SendMessageRequest.class));

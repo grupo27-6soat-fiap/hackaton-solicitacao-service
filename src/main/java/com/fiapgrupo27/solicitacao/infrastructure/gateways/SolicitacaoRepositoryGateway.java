@@ -60,7 +60,7 @@ public class SolicitacaoRepositoryGateway implements SolicitacaoGateway {
                                         arquivo.getStatus()
                                 ))
                                 .collect(Collectors.toList())
-                ))
+                , solicitacao.getEmail()))
                 .collect(Collectors.toList());
     }
 }

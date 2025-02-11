@@ -22,7 +22,7 @@ public class SQSGateway implements MensagemGateway {
 
     public SQSGateway(SqsClient sqsClient, @Value("${aws.sqs.queue-url}") String queueUrl, ObjectMapper objectMapper) {
         this.sqsClient = sqsClient;
-        this.queueUrl = queueUrl;
+        this.queueUrl = System.getenv().getOrDefault("AWS_SQS_QUEUE_URL", queueUrl);;;
         this.objectMapper = objectMapper;
         ensureQueueExists();
     }
@@ -44,9 +44,9 @@ public class SQSGateway implements MensagemGateway {
     }
 
     @Override
-    public void enviarMensagem(SolicitacaoArquivo arquivo, String fileUrl) {
+    public void enviarMensagem(SolicitacaoArquivo arquivo, String fileUrl, String email) {
         try {
-            Map<String, Object> mensagem = criarMensagem(arquivo, fileUrl);
+            Map<String, Object> mensagem = criarMensagem(arquivo, fileUrl, email);
             String mensagemJson = objectMapper.writeValueAsString(mensagem);
 
             SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
@@ -61,12 +61,13 @@ public class SQSGateway implements MensagemGateway {
         }
     }
 
-    private Map<String, Object> criarMensagem(SolicitacaoArquivo arquivo, String fileUrl ) {
+    private Map<String, Object> criarMensagem(SolicitacaoArquivo arquivo, String fileUrl, String email ) {
         Map<String, Object> mensagem = new HashMap<>();
         mensagem.put("idSolicitacao", arquivo.getIdSolicitacao());
         mensagem.put("nomeArquivo", arquivo.getNomeArquivo());
         mensagem.put("idArquivo", arquivo.getIdArquivo());
         mensagem.put("conteudoArquivo", fileUrl);
+        mensagem.put("email", email);
         return mensagem;
     }
 }

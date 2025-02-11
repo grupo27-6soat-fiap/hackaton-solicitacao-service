@@ -41,7 +41,7 @@ public class SolicitacaoController {
     @PreAuthorize("hasRole('USER')")
     public CreateSolicitacaoResponse criarSolicitacao(@RequestParam("arquivos") List<MultipartFile> arquivos, @AuthenticationPrincipal Jwt jwt) throws JsonProcessingException {
 
-        String email = jwt.getClaim("email");
+        String email = jwt.getClaim("cognito:username");
         Solicitacao solicitacao = new Solicitacao(null,LocalDateTime.now(),email);
         return solicitacaoDTOMapper.toResponse(createSolicitacaoInteractor.createSolicitacao(solicitacao, arquivos));
 
@@ -59,7 +59,7 @@ public class SolicitacaoController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<SolicitacaoResponseDTO>> obterSolicitacoes(@AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getClaim("email");
+        String email = jwt.getClaim("cognito:username");
         List<SolicitacaoResponseDTO> solicitacoes = obterSolicitacoesInteractor.executeFull(email);
         return ResponseEntity.ok(solicitacoes);
     }
