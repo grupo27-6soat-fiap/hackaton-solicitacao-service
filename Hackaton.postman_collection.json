@@ -7,7 +7,40 @@
 	},
 	"item": [
 		{
-			"name": "processVideoMicroServ",
+			"name": "RealizarSolicitacao",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "arquivos",
+							"type": "file",
+							"src": [
+								"/C:/Users/User/OneDrive/Área de Trabalho/chaves_festaDaVizinhanca.mp4",
+								"/C:/Users/User/OneDrive/Área de Trabalho/chaves_acapulco.mp4"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/solicitacoes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"solicitacoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AtualizaStatus",
 			"request": {
 				"method": "POST",
 				"header": [],

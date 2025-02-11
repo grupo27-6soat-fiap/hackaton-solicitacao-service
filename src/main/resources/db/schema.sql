@@ -5,3 +5,4 @@ CREATE TABLE solicitacao
     status        VARCHAR(50) NOT NULL,
     data_inclusao TIMESTAMP   NOT NULL
 );
+CREATE DATABASE IF NOT EXISTS hackaton_processamentovideos;

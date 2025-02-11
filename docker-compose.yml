@@ -1,0 +1,50 @@
+services:
+  solicitacao-service:
+    build: .
+    container_name: solicitacao-service-clean
+    depends_on:
+      - db
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_ENDPOINT_URL: http://localstack-main:4566
+      SPRING_DATASOURCE_USERNAME: dbadmin
+      SPRING_DATASOURCE_PASSWORD: postgres
+      AWS_SQS_QUEUE_URL: http://localstack-main:4566/000000000000/video-processing-queue
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/hackaton_processamentovideos
+      COGNITO_ISSUER_URI: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_gFnvA1Gwg
+      COGNITO_JWK_SET_URI: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_gFnvA1Gwg/.well-known/jwks.json
+
+
+
+    ports:
+      - "8080:8080"
+    restart: no
+    networks:
+      - localstack-network
+
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db_solicitacao
+    restart: always
+    environment:
+      POSTGRES_DB: hackaton_processamentovideos
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_solicitacao:/var/lib/postgresql/data
+    networks:
+      - localstack-network
+
+
+volumes:
+  pgdata_solicitacao:
+
+networks:
+  localstack-network:
+    external: true  # Usa a rede já criada
+    driver: bridge
