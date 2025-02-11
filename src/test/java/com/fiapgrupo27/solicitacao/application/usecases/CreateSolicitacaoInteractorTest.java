@@ -77,7 +77,7 @@ class CreateSolicitacaoInteractorTest {
         verify(s3Gateway).uploadFile(anyString(), any(), anyLong());
         
         // Aqui garantimos que um objeto válido está sendo passado
-        verify(mensagemGateway).enviarMensagem(eq(solicitacaoArquivoMock), eq("http://example.com/file-url"), "email");
+        verify(mensagemGateway).enviarMensagem(eq(solicitacaoArquivoMock), eq("http://example.com/file-url"), eq("email"));
 
         // Validações do arquivo
         verify(arquivo).getOriginalFilename();
