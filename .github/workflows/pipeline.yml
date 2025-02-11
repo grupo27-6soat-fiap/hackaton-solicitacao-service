@@ -1,5 +1,3 @@
-name: VideoService_Build
-
 on:
   push:
     branches:
@@ -8,18 +6,27 @@ on:
     branches:
       - master
   workflow_dispatch:
-  
 
 env:
-  ECR_REPOSITORY: hackaton
-  EKS_CLUSTER_NAME: hackaton-eks-cluster
+  ECR_REPOSITORY: foodtech
+  EKS_CLUSTER_NAME: foodtech-eks-cluster
   AWS_REGION: us-east-1
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Check if commit is a direct commit to production
+        run: |
+          if [ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]; then
+            echo "Committing directly to production is not allowed!" && exit 1
+          fi
+
+      - name: Fail if there is a direct push to production
+        run: |
+          echo "Direct push to production is not allowed!"
+          #exit 1
+
       - name: Set short git commit SHA
         id: commit
         uses: prompt/actions-commit-hash@v3
@@ -33,17 +40,29 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Set permissions for Gradle wrapper
-        run: chmod +x ./gradlew    
-
-      - name: Build with Gradle
-        run: |
-          ./gradlew build --no-daemon
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
         with:
-          name: Package
-          path: build/libs
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
-      
+      # Garanta que o wrapper tenha permissão de execução
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run tests and generate JaCoCo coverage
+        run: ./gradlew clean test jacocoTestReport -Dorg.gradle.java.home=$JAVA_HOME
+
+      - name: Build and analyze with SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          ./gradlew clean build sonarqube \
+            -Dsonar.projectKey=grupo27-6soat-fiap_hackaton-solicitacao-service \
+            -Dsonar.organization=grupo27-6soat-fiap-1 \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml \
+            -Dorg.gradle.java.home=$JAVA_HOME
